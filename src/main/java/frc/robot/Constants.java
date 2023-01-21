@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -37,6 +38,15 @@ public final class Constants {
     // public static final DifferentialDriveKinematics K_DRIVE_KINEMATICS = new
     // DifferentialDriveKinematics(kTRACK_WIDTH_M);
 
+    public static final double kS_VOLTS = 0.0734;
+    public static final double kV_VOLT_SECOND_PER_METER = 2.7;
+    public static final double kA_VOLT_SEONDS_SQUARED_PER_METER = 0.074;
+    public static final double kMAX_SPEED_METERS_PER_SECOND = 4;
+    public static final double kMAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
+
+
+    public static final DifferentialDriveKinematics kDRIVE_KINEMATICS = 
+    new DifferentialDriveKinematics(kTRACK_WIDTH_M);
     // shifter numatic ports
     public static final int kSHIFT_UP = 1;
     public static final int kSHIFT_DOWN = 0;
