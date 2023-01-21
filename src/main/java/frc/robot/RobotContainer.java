@@ -13,23 +13,24 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
-LOGITECH F310 Controller:
-X=1  (blue)
-a=2  (green)
-B=3   (rec)
-Y=4   (yellow)
-LB =5 (left bumper)
-RB=6  (right bumper)
-LT=7  (left trigger)
-RT=8  (right trigger)
-back=9  
-start=10
-LJB = 11 (press left joystick)
-RJB =12   (press right joystick)
-left vertical axis =1
-left horizontal axis =0
-Right vertical axis =3
-right horizontal axis =2
+ON LOGITECH F310 CONTROLLER:
+X = 1  (Blue)
+a = 2  (Green)
+B = 3   (Red)
+Y = 4   (Yellow)
+LB = 5 (Left Bumper: top button)
+RB = 6  (Right-Bumper: top button)
+LT = 7  (Left-Trigger: bottom button)
+RT = 8  (Right-Trigger: bottom button)
+Select/Back = 9 (Above left joystick) 
+Start = 10 (Above right joystick)
+LJB = 11 (Press left joystick)
+RJB = 12   (Press right joystick)
+
+Left Joystick Vertical Axis = 1
+Left Joystick Horizontal Axis = 0
+Right Joystick Vertical Axis = 3
+Right Joystick Horizontal Axis = 2 
  */
 public class RobotContainer {
   
