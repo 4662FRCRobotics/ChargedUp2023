@@ -14,12 +14,34 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.libraries.Gamepad;
+import frc.robot.subsystems.Drive;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
-
+LOGITECH F310 Controller:
+X=1  (blue)
+a=2  (green)
+B=3   (rec)
+Y=4   (yellow)
+LB =5 (left bumper)
+RB=6  (right bumper)
+LT=7  (left trigger)
+RT=8  (right trigger)
+back=9  
+start=10
+LJB = 11 (press left joystick)
+RJB =12   (press right joystick)
+left vertical axis =1
+left horizontal axis =0
+Right vertical axis =3
+right horizontal axis =2
  */
 public class RobotContainer {
+
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
@@ -31,22 +53,27 @@ public class RobotContainer {
   private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
+  //private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
+
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final Gamepad m_driverController = new Gamepad(
+      OperatorConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
+    m_robotDrive.setDefaultCommand(
+      Commands.run(
+        () ->
+        m_robotDrive.arcadeDrive(m_driverController.getLeftY()*(1-((m_driverController.getRightY()+1)*.25)), -m_driverController.getRightX()*(1-((m_driverController.getRightY()+1)*.25))),
+         m_robotDrive)
+        );
+            //m_drive.arcadeDrive((m_driverController.getY()*-1*(1-((m_driverController.getThrottle()+1)*.25))), -m_driverController.getZ()), m_drive)
     // Configure the trigger bindings
     configureBindings();
-    m_robotDrive.setDefaultCommand(
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
-        Commands.run(
-            () -> m_robotDrive.arcadeDrive(
-                -m_driverController.getY() * (1 - ((m_driverController.getThrottle() + 1) * 0.25)), -m_driverController.getX()),
-            m_robotDrive));
+
   }
 
   /**
@@ -66,10 +93,10 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
+
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
-
   }
 
   /**
@@ -81,7 +108,8 @@ public class RobotContainer {
     return m_autoSelect;
   }
   public Command getAutonomousCommand() {
-    return m_autoCommand;
     // An example command will be run in autonomous
+    Command autoCommand = null; 
+    return autoCommand;
   }
 }
