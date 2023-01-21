@@ -49,7 +49,11 @@ public class Drive extends SubsystemBase {
     m_rightController1.setSmartCurrentLimit(DriveConstants.kCURRENT_LIMT);
     m_rightController2.setSmartCurrentLimit(DriveConstants.kCURRENT_LIMT);
     
+    m_leftController2.follow(m_leftController1);
+    m_rightController2.follow(m_rightController1);
     m_differentialdrive = new DifferentialDrive(m_leftController1, m_rightController1);
+    m_rightController1.setInverted(!DriveConstants.kIS_DRIVE_INVERTED);
+    m_leftController1.setInverted(DriveConstants.kIS_DRIVE_INVERTED);
     // super(
     // The PIDController used by the subsystem
     // new PIDController(0, 0, 0));
@@ -61,6 +65,7 @@ public class Drive extends SubsystemBase {
 
   public void arcadeDrive(double velocity, double heading) {
     m_differentialdrive.arcadeDrive(velocity, -1 * heading);
+    
     // System.out.println("velocity="+velocity);
     // System.out.println("heading="+heading);
   }
