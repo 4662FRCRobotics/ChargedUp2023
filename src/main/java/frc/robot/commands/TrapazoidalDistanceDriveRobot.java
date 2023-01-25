@@ -11,23 +11,23 @@ import frc.robot.Constants;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TrapazoidalDistanceDriveRobot extends TrapezoidProfileCommand {
+//public class TrapazoidalDistanceDriveRobot extends TrapezoidProfileCommand {
   /** Creates a new TrapazoidalDistanceDriveRobot. */
-  public TrapazoidalDistanceDriveRobot() {
-    super(
+ // public TrapazoidalDistanceDriveRobot() {
+   // super(
       
         // The motion profile to be executed
-        new TrapezoidProfile(
+       // new TrapezoidProfile(
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(Constants.DriveConstants.kMAX_SPEED_METERS_PER_SECOND,
-                Constants.DriveConstants.kMAX_ACCELERATION_METERS_PER_SECOND_SQUARED),
+           // new TrapezoidProfile.Constraints(Constants.DriveConstants.kMAX_SPEED_METERS_PER_SECOND,
+                //Constants.DriveConstants.kMAX_ACCELERATION_METERS_PER_SECOND_SQUARED),
             // Goal state
-            new TrapezoidProfile.State(distMeter, 0)),
+            //new TrapezoidProfile.State(distMeter, 0)),
             // pipe the profile state to the drive
-            setpointState -> drive.setDriveStates(setpointState, setpointState),
+            //setpointState -> drive.setDriveStates(setpointState, setpointState)
               // require drive
-              drive
-            );
-            drive.resetTrapezoidal();
-    }
-  }
+             
+            //);
+           // drive.resetTrapezoidal();
+  //  }
+ // }

@@ -20,7 +20,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.TrapazoidalDistanceDriveRobot;
+import frc.robot.commands.PlaceCone;
+//import frc.robot.commands.TrapazoidalDistanceDriveRobot;
 import frc.robot.commands.WaitForCount;
 import frc.robot.libraries.AutonomousCommands;
 import frc.robot.libraries.AutonomousSteps;
@@ -179,6 +180,8 @@ public class Autonomous extends SubsystemBase {
   private StepState m_stepWait2SwAB;
   private WaitForCount m_waitForCount;
   private StepState m_stepWaitForCount;
+  private PlaceCone m_placeConeM;
+  private StepState m_stepPlaceConeM;
   
   
   //private String m_path1JSON = "paths/Path1.wpilib.json";
@@ -201,7 +204,7 @@ public class Autonomous extends SubsystemBase {
   public Autonomous(ConsoleAuto consoleAuto,
                     Drive driveNorm) {
 
-    m_drive = drive;
+  
     m_ConsoleAuto = consoleAuto;
 
     m_selectedCommand = m_autoSelectCommand[0];
@@ -223,50 +226,21 @@ public class Autonomous extends SubsystemBase {
     m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
     m_stepWaitForCount = new StepState(AutonomousSteps.WAITLOOP);
 
-    m_driveDist1 = new DriveDistanceTrapProfile(-2, m_driveNorm);
-    m_autoCommand.addOption(AutonomousSteps.DRIVE1, m_driveDist1);
-    m_stepDriveDist1 = new StepState(AutonomousSteps.DRIVE1, m_ConsoleAuto.getSwitchSupplier(3));
+    m_placeConeM = new PlaceConeM();
+    m_autoCommand.addOption(AutonomousSteps.PLACECONEM, m_placeConeM);
+    m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM);
+   
     
-    m_driveDistSM1 = new DriveDistanceSMPID(-2, m_driveNorm);
-    m_autoCommand.addOption(AutonomousSteps.DRIVE2, m_driveDistSM1);
-    m_stepDriveDist2 = new StepState(AutonomousSteps.DRIVE2, m_stepDriveDist1.getBooleanSupplier());
 
-    genTrajectory();
-    m_drive3Path = new DriveRamsetePath(m_drive3Trajectory, kRESET_ODOMETRY, m_driveNorm);
-    m_autoCommand.addOption(AutonomousSteps.DRIVE3, m_drive3Path);
-    m_stepDrive3Path = new StepState(AutonomousSteps.DRIVE3, m_stepDriveDist1.getBooleanSupplier());
-
-    m_autoBool1 = new GenRandomBoolean(m_driveNorm::setBool1);
-    m_autoCommand.addOption(AutonomousSteps.FINDSUMPIN, m_autoBool1);
-    m_stepAutoBool1 = new StepState(AutonomousSteps.FINDSUMPIN, m_ConsoleAuto.getSwitchSupplier(4));
-    m_stepWait2SwAB = new StepState(AutonomousSteps.WAIT2, () -> m_driveNorm.isBool1());
-
-    m_trajPath1 = readPaths(m_path1JSON);
-    m_drivePath1 = new DriveRamsetePath(m_trajPath1, kRESET_ODOMETRY, m_driveNorm);
-    m_autoCommand.addOption(AutonomousSteps.DRIVEP1, m_drivePath1);
-    m_stepDrivePath1 = new StepState(AutonomousSteps.DRIVEP1, m_ConsoleAuto.getSwitchSupplier(5));
 
     // array group length must match the enum entries in AutonomousCommands
     // anything extra is ignored
     // the command lists are matched sequentially to the enum entries
-    m_cmdSteps = new StepState [] [] {
-      {m_stepWaitForCount, m_stepDriveDist1, m_stepWait1Sw1, m_stepWait2Sw2},
-      {m_stepWait2Sw1, m_stepDriveDist2, m_stepWaitForCount},
-      {m_stepWaitForCount, m_stepDrive3Path, m_stepAutoBool1, m_stepWait2SwAB},
-      {m_stepWaitForCount, m_stepDrivePath1}
-    };
 
   }
 
   // generate an internal trajectory using specified begin, way points, and end
-  private void genTrajectory() {
-    m_drive3Trajectory = 
-      TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(1, 0)),
-        new Pose2d(2, 0, new Rotation2d(0)),
-        m_driveNorm.getTrajConfig());
-  }
+
 
   // read externally generated trajectory (path) from an external file in the standard "deploy" path
   // these are generated from a standard tool such as pathweaver
@@ -276,7 +250,7 @@ public class Autonomous extends SubsystemBase {
       Path trajPath = Filesystem.getDeployDirectory().toPath().resolve(jsonPath);
       trajectory = TrajectoryUtil.fromPathweaverJson(trajPath);
     } catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + m_path1JSON, ex.getStackTrace());
+    
     }
     return trajectory;
   }
