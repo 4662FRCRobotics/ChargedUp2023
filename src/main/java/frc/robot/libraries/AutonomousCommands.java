@@ -6,10 +6,8 @@ package frc.robot.libraries;
 
 /** Add your docs here. */
 public enum AutonomousCommands {
-    LOW_GOAL_OUT,
-    HIGH_GOAL_D1,
-    HIGH_GOAL_D2,
-    DRIVE_PATH1;
+    GENERIC_DEFAULT;
+
 
     public String getSelectName() {
         return this.toString();

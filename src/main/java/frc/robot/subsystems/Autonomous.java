@@ -226,7 +226,7 @@ public class Autonomous extends SubsystemBase {
     m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
     m_stepWaitForCount = new StepState(AutonomousSteps.WAITLOOP);
 
-    m_placeConeM = new PlaceConeM();
+    m_placeConeM = new PlaceCone();
     m_autoCommand.addOption(AutonomousSteps.PLACECONEM, m_placeConeM);
     m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM);
    
@@ -235,7 +235,11 @@ public class Autonomous extends SubsystemBase {
 
     // array group length must match the enum entries in AutonomousCommands
     // anything extra is ignored
+    m_cmdSteps = new StepState [] [] {
+      {m_stepWaitForCount}
+        };
     // the command lists are matched sequentially to the enum entries
+
 
   }
 
@@ -268,6 +272,7 @@ public class Autonomous extends SubsystemBase {
     m_iPatternSelect = autoSelectIx;
     if (autoSelectIx >= m_autoSelectCommand.length) {
       autoSelectIx = 0;
+      m_iPatternSelect = 0;
     }
 
     boolean isAllianceRed = (DriverStation.getAlliance().name() == "Red");
