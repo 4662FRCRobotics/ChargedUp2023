@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -37,6 +38,15 @@ public final class Constants {
     // public static final DifferentialDriveKinematics K_DRIVE_KINEMATICS = new
     // DifferentialDriveKinematics(kTRACK_WIDTH_M);
 
+    public static final double kS_VOLTS = 0.0734;
+    public static final double kV_VOLT_SECOND_PER_METER = 2.7;
+    public static final double kA_VOLT_SEONDS_SQUARED_PER_METER = 0.074;
+    public static final double kMAX_SPEED_METERS_PER_SECOND = 4;
+    public static final double kMAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
+
+
+    public static final DifferentialDriveKinematics kDRIVE_KINEMATICS = 
+    new DifferentialDriveKinematics(kTRACK_WIDTH_M);
     // shifter numatic ports
     public static final int kSHIFT_UP = 1;
     public static final int kSHIFT_DOWN = 0;
@@ -62,54 +72,6 @@ public final class Constants {
   public static class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;
-
-
-    public static final class DriveConstants {
-      public static final int kLeftMotor1Port = 2;
-      public static final int kLeftMotor2Port = 3;
-      public static final int kRightMotor1Port = 4;
-      public static final int kRightMotor2Port = 5;
-      public static final boolean kIS_DRIVE_INVERTED = true;
-
-      public static final double kRAMP_RATE = 1.0;
-      public static final int kCURRENT_LIMT = 40;
-
-      public static final double kTIRE_SIZE_IN = 6.0;
-      public static final double kTIRE_SIZE_M = Units.inchesToMeters(kTIRE_SIZE_IN);
-      public static final int kPULSE_PER_ROTATION = 1;
-
-      public static final double kLOW_GEAR_REDUCTION = (42.0 / 12.0) * (60.0 / 14.0);
-      public static final double kHIGH_GEAR_REDUCTION = (42.0 / 12.0) * (50.0 / 24.0);
-      public static final double kENCODER_DISTANCE_PER_PULSE_M_HIGH = ((double) kPULSE_PER_ROTATION / kHIGH_GEAR_REDUCTION);
-      public static final double kENCODER_DISTANCE_PER_PULSE_M_LOW = ((double) kPULSE_PER_ROTATION   / kLOW_GEAR_REDUCTION);
-      // * (kTIRE_SIZE_M * Math.PI);
-      public static final double kTRACK_WIDTH_M = 0.64;
-
-      // public static final DifferentialDriveKinematics K_DRIVE_KINEMATICS = new
-      // DifferentialDriveKinematics(kTRACK_WIDTH_M);
-
-      // shifter numatic ports
-      public static final int kSHIFT_UP = 1;
-      public static final int kSHIFT_DOWN = 0;
-
-      public static final double kDRIVE_P = 0.3;
-      public static final double kDRIVE_I = 0.0;
-      public static final double kDRIVE_D = 0.0;
-      public static final double kDRIVE_TOLERANCE = 2;
-      public static final double kDRIVE_PID_LIMIT = 0.75;
-      public static final double kTURN_PID_LIMIT = 0.6;
-      public static final double kTURN_ANGLE_P = 0.33;
-      public static final double kTURN_ANGLE_I = 0.0;
-      public static final double kTURN_ANGLE_D = 0.41;
-      public static final double kTURN_ANGLE_TOLERANCE = 1;
-      public static final double kTURN_ANGLE_TOLERANCE_DEG_PER_S = 10;
-      /*
-       * public static final double kKEEP_HEADING_P = 0.2;
-       * public static final double kKEEP_HEADING_I = 0.0;
-       * public static final double kKEEP_HEADING_D = 0.4;
-       * public static final double kKEEP_HEADING_TOLERANCE = 1;
-       */
-  }
-
+    public static final int kAUTONOMOUS_CONSOLE_PORT = 2;
   }
 }
