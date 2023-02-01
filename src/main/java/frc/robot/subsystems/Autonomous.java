@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PlaceCone;
-//import frc.robot.commands.TrapazoidalDistanceDriveRobot;
 import frc.robot.commands.WaitForCount;
 import frc.robot.libraries.AutonomousCommands;
 import frc.robot.libraries.AutonomousSteps;
@@ -171,7 +170,7 @@ public class Autonomous extends SubsystemBase {
   private boolean m_bIsCommandDone = false;
   private int m_stepIndex;
   private int m_iWaitCount;
-
+  private Trajectory m_drive3Trajectory;
   private WaitCommand m_wait1;
   private StepState m_stepWait1Sw1;
   private WaitCommand m_wait2;
@@ -244,6 +243,14 @@ public class Autonomous extends SubsystemBase {
   }
 
   // generate an internal trajectory using specified begin, way points, and end
+  private void genTrajectory() {
+    m_drive3Trajectory = 
+      TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(1, 0)),
+        new Pose2d(2, 0, new Rotation2d(0)),
+        m_drive.getTrajConfig());
+  }
 
 
   // read externally generated trajectory (path) from an external file in the standard "deploy" path

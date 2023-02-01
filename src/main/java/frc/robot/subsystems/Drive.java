@@ -11,9 +11,12 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -30,6 +33,9 @@ public class Drive extends SubsystemBase {
   private CANSparkMax m_rightController2;
   private DifferentialDrive m_differentialdrive;
   private AHRS m_navX;
+  private SimpleMotorFeedforward m_feedForward;
+  private DifferentialDriveVoltageConstraint m_autoVoltageConstraint;
+  private TrajectoryConfig m_trajectoryConfig;
   private RelativeEncoder m_leftEncoder1;
   private RelativeEncoder m_rightEncoder1;
   private double m_leftEncoderSign;
@@ -75,6 +81,24 @@ public class Drive extends SubsystemBase {
     m_rightEncoder1 = m_rightController1.getEncoder();
     m_diffOdometry = new DifferentialDriveOdometry(new Rotation2d(), m_driveDistance, m_driveDistance);
     m_navX = new AHRS(SerialPort.Port.kMXP);
+
+    m_feedForward = new SimpleMotorFeedforward(
+      DriveConstants.kS_VOLTS,
+      DriveConstants.kV_VOLT_SECOND_PER_METER,
+      DriveConstants.kA_VOLT_SEONDS_SQUARED_PER_METER);
+
+    //System.out.printf("Encoder dist per pulse %.4f", DriveNormSubsystemConst.kENCODER_DISTANCE_PER_PULSE_M);
+
+    m_autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+      m_feedForward,
+      DriveConstants.kDRIVE_KINEMATICS,
+      DriveConstants.kMAX_VOLTAGE);
+      
+    m_trajectoryConfig = new TrajectoryConfig(
+      DriveConstants.kMAX_SPEED_METERS_PER_SECOND,
+      DriveConstants.kMAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+      .setKinematics(DriveConstants.kDRIVE_KINEMATICS)
+      .addConstraint(m_autoVoltageConstraint);
   }
 
   @Override
@@ -87,6 +111,10 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Right Distance", getRightDistance());
     // System.out.println(getPitch());
 
+  }
+
+  public TrajectoryConfig getTrajConfig() {
+    return m_trajectoryConfig;
   }
 
   public Pose2d getPos() {
