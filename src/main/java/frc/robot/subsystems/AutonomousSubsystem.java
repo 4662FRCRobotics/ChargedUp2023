@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PlaceCone;
+import frc.robot.commands.RamseteDrivePath;
 import frc.robot.commands.WaitForCount;
 import frc.robot.libraries.AutonomousCommands;
 import frc.robot.libraries.AutonomousSteps;
@@ -181,7 +182,8 @@ public class AutonomousSubsystem extends SubsystemBase {
   private StepState m_stepWaitForCount;
   private PlaceCone m_placeConeM;
   private StepState m_stepPlaceConeM;
-  
+  private RamseteDrivePath m_drive3Path;
+  private StepState m_stepDrive3Path;
   
   //private String m_path1JSON = "paths/Path1.wpilib.json";
   //private Trajectory m_trajPath1;
@@ -229,13 +231,16 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_autoCommand.addOption(AutonomousSteps.PLACECONEM, m_placeConeM);
     m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM);
    
-    
+    genTrajectory();
+    m_drive3Path = new RamseteDrivePath(m_drive3Trajectory, kRESET_ODOMETRY, m_drive);
+    m_autoCommand.addOption(AutonomousSteps.DRIVE3, m_drive3Path);
+    m_stepDrive3Path = new StepState(AutonomousSteps.DRIVE3);
 
 
     // array group length must match the enum entries in AutonomousCommands
     // anything extra is ignored
     m_cmdSteps = new StepState [] [] {
-      {m_stepWaitForCount}
+      {m_stepWaitForCount, m_stepDrive3Path}
         };
     // the command lists are matched sequentially to the enum entries
 
