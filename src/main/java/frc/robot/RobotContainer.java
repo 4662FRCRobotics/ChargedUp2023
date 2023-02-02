@@ -7,8 +7,8 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
-import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.AutonomousSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.libraries.ConsoleAuto;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,11 +21,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drive m_robotDrive = new Drive();
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
   private final ConsoleAuto m_consoleAuto = new ConsoleAuto(OperatorConstants.kAUTONOMOUS_CONSOLE_PORT);
 
-  private final Autonomous m_autonomous = new Autonomous(m_consoleAuto, m_robotDrive);
+  private final AutonomousSubsystem m_autonomous = new AutonomousSubsystem(m_consoleAuto, m_robotDrive);
 
   private final AutoSelect m_autoSelect = new AutoSelect(m_autonomous);
   private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive);

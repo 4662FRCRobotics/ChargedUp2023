@@ -4,21 +4,21 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Autonomous;
+import frc.robot.subsystems.AutonomousSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /** An example command that uses an example subsystem. */
 public class AutoSelect extends CommandBase {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-    private final Autonomous m_autoSubsystem;
+    private final AutonomousSubsystem m_autoSubsystem;
 
     /**
      * Creates a new ExampleCommand.
      *
      * @param subsystem The subsystem used by this command.
      */
-    public AutoSelect(Autonomous autoSubsystem) {
+    public AutoSelect(AutonomousSubsystem autoSubsystem) {
         m_autoSubsystem = autoSubsystem;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(autoSubsystem);

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.libraries.ConsoleJoystick;
 
-public class Drive extends SubsystemBase {
+public class DriveSubsystem extends SubsystemBase {
   /** Creates a new Drive. */
   private ConsoleJoystick m_console;
   private CANSparkMax m_leftController1;
@@ -23,7 +23,7 @@ public class Drive extends SubsystemBase {
   private CANSparkMax m_rightController2;
   private DifferentialDrive  m_differentialdrive;
 
-  public Drive() {
+  public DriveSubsystem() {
     m_leftController1 = new CANSparkMax(DriveConstants.kLeftMotor1Port, MotorType.kBrushless);
     m_leftController2 = new CANSparkMax(DriveConstants.kLeftMotor2Port, MotorType.kBrushless);
     m_rightController1 = new CANSparkMax(DriveConstants.kRightMotor1Port, MotorType.kBrushless);
