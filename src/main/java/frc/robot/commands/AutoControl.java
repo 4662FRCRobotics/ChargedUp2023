@@ -2,16 +2,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Autonomous;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.AutonomousSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
 public class AutoControl extends CommandBase {
     
     private Command m_currentCommand;
-    private Autonomous m_autonomous;
-    private Drive m_drive;
+    private AutonomousSubsystem m_autonomous;
+    private DriveSubsystem m_drive;
 
-    public AutoControl(Autonomous autonomous, Drive drive) 
+    public AutoControl(AutonomousSubsystem autonomous, DriveSubsystem drive) 
     {
         m_autonomous = autonomous;
         m_drive = drive;

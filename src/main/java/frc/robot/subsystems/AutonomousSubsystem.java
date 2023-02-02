@@ -29,10 +29,10 @@ import frc.robot.libraries.AutonomousCommandSelector;
 import frc.robot.libraries.ConsoleAuto;
 import frc.robot.libraries.StepState;
 
-public class Autonomous extends SubsystemBase {
+public class AutonomousSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
 
-  private Drive m_drive;
+  private DriveSubsystem m_drive;
 
   AutonomousCommandSelector<AutonomousSteps> m_autoCommand;
   private String kAUTO_TAB = "Autonomous";
@@ -106,7 +106,7 @@ public class Autonomous extends SubsystemBase {
                                       .getEntry()
                                     };
                            
-  public Autonomous(GenericEntry[] m_step) {
+  public AutonomousSubsystem(GenericEntry[] m_step) {
     this.m_step = m_step;
   }
 
@@ -201,8 +201,8 @@ public class Autonomous extends SubsystemBase {
     construct the StepState(s) for the command with optional boolean constructor
   */
 
-  public Autonomous(ConsoleAuto consoleAuto,
-                    Drive driveNorm) {
+  public AutonomousSubsystem(ConsoleAuto consoleAuto,
+                    DriveSubsystem driveNorm) {
 
   
     m_ConsoleAuto = consoleAuto;
