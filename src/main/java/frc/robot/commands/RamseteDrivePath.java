@@ -8,15 +8,16 @@ import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.Constants;
-import frc.robot.subsystems.Drive;
+
+import frc.robot.subsystems.DriveSubsystem;
 
 public class RamseteDrivePath extends RamseteCommand {
   /** Creates a new DriveRamsetePath. */
-  private Drive m_drive;
+  private DriveSubsystem m_drive;
   private Trajectory m_trajectory;
   private boolean m_resetOdometry;
 
-  public RamseteDrivePath(Trajectory trajectory, boolean resetOdometry, Drive drive) {
+  public RamseteDrivePath(Trajectory trajectory, boolean resetOdometry, DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     // alternate construction omits feedfwd, wheelspeeds, and pidcontrollers
     // two outputs - the simple (non PIDController) sends wheel speeds, not volts!!!
@@ -39,7 +40,7 @@ public class RamseteDrivePath extends RamseteCommand {
     m_drive = drive;
   }
 
-  public RamseteDrivePath(Trajectory trajectory, Drive drive) {
+  public RamseteDrivePath(Trajectory trajectory, DriveSubsystem drive) {
     this(trajectory, false, drive);
   }
 
