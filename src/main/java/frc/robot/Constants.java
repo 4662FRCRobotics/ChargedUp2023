@@ -74,5 +74,10 @@ public final class Constants {
 
     public static final int kDriverControllerPort = 0;
     public static final int kAUTONOMOUS_CONSOLE_PORT = 2;
+    public static final int kOPERATOR_CONTROLLER_PORT = 1;
+  }  
+
+  public static class TurnTableConstants{
+    public static final int kTURN_TABLE_MOTOR_PORT = 10;
   }
 }

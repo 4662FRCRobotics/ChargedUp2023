@@ -4,11 +4,15 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ArmTurntable extends SubsystemBase {
   /** Creates a new ArmTurntable. */
 
+  private WPI_TalonSRX m_TurnTableMotor;
   /*
    * single motor controller - most likely talon srx (CRTE libs)
    * limit switches - connect directly to motor controller
@@ -18,6 +22,7 @@ public class ArmTurntable extends SubsystemBase {
    *  potentiometer absolute and retains
    */
   public ArmTurntable() {
+     m_TurnTableMotor = new WPI_TalonSRX (Constants.TurnTableConstants.kTURN_TABLE_MOTOR_PORT);
     /*
      * define the conroller/sensor stuff and set defaults
      */
@@ -45,6 +50,7 @@ public class ArmTurntable extends SubsystemBase {
 
   public void moveTurntable(double speed) {
     // set motor speed
+    m_TurnTableMotor.set(speed);
   }
 
 
