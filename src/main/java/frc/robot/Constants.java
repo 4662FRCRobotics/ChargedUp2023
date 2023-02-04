@@ -18,11 +18,10 @@ public final class Constants {
     public static final int kLeftMotor2Port = 3;
     public static final int kRightMotor1Port = 4;
     public static final int kRightMotor2Port = 5;
-    public static final boolean kIS_DRIVE_INVERTED = true;
+    public static final boolean kIS_DRIVE_INVERTED = false;
 
     public static final double kRAMP_RATE = 1.0;
     public static final int kCURRENT_LIMT = 40;
-
     public static final double kTIRE_SIZE_IN = 6.0;
     public static final double kTIRE_SIZE_M = Units.inchesToMeters(kTIRE_SIZE_IN);
     public static final int kPULSE_PER_ROTATION = 1;
