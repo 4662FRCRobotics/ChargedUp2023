@@ -11,8 +11,8 @@ public class Gamepad extends GenericHID {
   /** Creates a new Gamepad. */
   public static final byte kLeftHorizontalAxis = 0;
   public static final byte kLeftVerticalAxis = 1;
-  public static final byte kRightHorizontalAxis = 2;
-  public static final byte kRightVerticalAxis = 3;
+  public static final byte kRightHorizontalAxis = 4;
+  public static final byte kRightVerticalAxis = 5;
 
   public enum AxisType {
     kLeftX(0),
