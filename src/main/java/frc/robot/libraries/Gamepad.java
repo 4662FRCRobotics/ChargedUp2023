@@ -6,19 +6,24 @@ package frc.robot.libraries;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Gamepad extends GenericHID {
   /** Creates a new Gamepad. */
   public static final byte kLeftHorizontalAxis = 0;
   public static final byte kLeftVerticalAxis = 1;
+  public static final byte kLeftTriggerAxis = 2;
+  public static final byte kRightTriggerAxis = 3;
   public static final byte kRightHorizontalAxis = 4;
   public static final byte kRightVerticalAxis = 5;
 
   public enum AxisType {
     kLeftX(0),
     kLeftY(1),
-    kRightX(2),
-    KRightY(3);
+    kLeftTrigger(2),
+    KRightTrigger(3),
+    kRightX(4),
+    KRightY(5);
 
     public final int value;
 
@@ -38,18 +43,18 @@ public class Gamepad extends GenericHID {
   }
 
   public enum ButtonType {
-    kX(1),
-    kA(2),
-    kB(3),
+    kX(3),
+    kA(1),
+    kB(2),
     kY(4),
     kLB(5),
     kRB(6),
-    kLT(7),
-    kRT(8),
-    kBack(9),
-    kStart(10),
-    kLJB(11),
-    kRJB(12);
+   // kLT(7),
+    //kRT(8),
+    kBack(7),
+    kStart(8),
+    kLJB(9),
+    kRJB(10);
 
     public final int value;
 
@@ -67,6 +72,8 @@ public class Gamepad extends GenericHID {
     m_axes[AxisType.kLeftY.value] = kLeftVerticalAxis;
     m_axes[AxisType.kRightX.value] = kRightHorizontalAxis;
     m_axes[AxisType.KRightY.value] = kRightVerticalAxis;
+    m_axes[AxisType.kLeftTrigger.value] = kLeftTriggerAxis;
+    m_axes[AxisType.KRightTrigger.value] = kRightTriggerAxis;
   }
 
   public final double getLeftX() {
@@ -77,6 +84,12 @@ public class Gamepad extends GenericHID {
     return getRawAxis(m_axes[AxisType.kLeftY.value]);
   }
 
+  public final double getLeftTrigger() {
+    return getRawAxis(m_axes[AxisType.kLeftTrigger.value]);
+  }
+  public final double getRightTrigger() {
+    return getRawAxis(m_axes[AxisType.KRightTrigger.value]);
+  }
   public final double getRightX() {
     return getRawAxis(m_axes[AxisType.kRightX.value]);
   }
@@ -85,9 +98,9 @@ public class Gamepad extends GenericHID {
     return getRawAxis(m_axes[AxisType.KRightY.value]);
   }
 
-  /*public int getPOV() {
-    return getRawButton(ROTSW.kDpad.value);
-  }*/
+  //public int getPOV() {
+   // return getRawAxis(ROTSW.kDpad.value);
+ // }
 
   public boolean getX() {
     return getRawButton(ButtonType.kX.value);
@@ -105,22 +118,22 @@ public class Gamepad extends GenericHID {
     return getRawButton(ButtonType.kY.value);
   }
 
-  public boolean getLB() {
-    return getRawButton(ButtonType.kLB.value);
+  public Trigger getLB() {
+    return (getRawButton(ButtonType.kLB.value).castTo(Trigger::new));
   }
 
   public boolean getRB() {
     return getRawButton(ButtonType.kRB.value);
   }
 
-  public boolean getLT() {
+ /*  public boolean getLT() {
     return getRawButton(ButtonType.kLT.value);
   }
 
   public boolean getRT() {
     return getRawButton(ButtonType.kRT.value);
   }
-
+*/
   public boolean getBack() {
     return getRawButton(ButtonType.kBack.value);
   }

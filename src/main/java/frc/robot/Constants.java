@@ -42,7 +42,8 @@ public final class Constants {
     public static final double kA_VOLT_SEONDS_SQUARED_PER_METER = 0.074;
     public static final double kMAX_SPEED_METERS_PER_SECOND = 4;
     public static final double kMAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
-
+    public static final double kLOW_GEAR_SPEED = .5;
+    public static final double kHIGH_GEAR_SPEED = 1;
 
     public static final DifferentialDriveKinematics kDRIVE_KINEMATICS = 
     new DifferentialDriveKinematics(kTRACK_WIDTH_M);

@@ -19,23 +19,22 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
 ON LOGITECH F310 CONTROLLER:
-X = 1  (Blue)
-a = 2  (Green)
-B = 3   (Red)
+
+a = 1 (Green)
+B = 2   (Red)
+X = 3  (Blue)
 Y = 4   (Yellow)
 LB = 5 (Left Bumper: top button)
 RB = 6  (Right-Bumper: top button)
-LT = 7  (Left-Trigger: bottom button)
-RT = 8  (Right-Trigger: bottom button)
-Select/Back = 9 (Above left joystick) 
-Start = 10 (Above right joystick)
-LJB = 11 (Press left joystick)
-RJB = 12   (Press right joystick)
+Select/Back = 7 (Above left joystick) 
+Start = 8 (Above right joystick)
+LJB = 9 (Press left joystick)
+RJB = 10   (Press right joystick)
 
 Left Joystick Vertical Axis = 1
 Left Joystick Horizontal Axis = 0
-Right Joystick Vertical Axis = 3
-Right Joystick Horizontal Axis = 2 
+Right Joystick Vertical Axis = 5
+Right Joystick Horizontal Axis = 4
  */
 public class RobotContainer {
 
@@ -70,7 +69,12 @@ public class RobotContainer {
     //     m_drive)
             //m_drive.arcadeDrive((m_driverController.getY()*-1*(1-((m_driverController.getThrottle()+1)*.25))), -m_driverController.getZ()), m_drive)
     // Configure the trigger bindings
-    configureBindings();
+    configureBindings(
+m_driverController
+    .getLB()
+    .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kLOW_GEAR_SPEED)))
+    .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
+    );
 
   }
 

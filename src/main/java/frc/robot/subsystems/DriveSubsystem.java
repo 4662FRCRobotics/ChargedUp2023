@@ -69,4 +69,9 @@ public class DriveSubsystem extends SubsystemBase {
     // System.out.println("velocity="+velocity);
     // System.out.println("heading="+heading);
   }
+
+  public void setMaxOutput(double maxOutput) {
+    m_drive.setMaxOutput(maxOutput);
+  }
+
 }
