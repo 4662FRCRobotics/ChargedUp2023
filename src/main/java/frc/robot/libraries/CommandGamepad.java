@@ -17,7 +17,6 @@ public class CommandGamepad extends GenericHID{
 
     public CommandGamepad(int port) {
         super(port);
-        //TODO Auto-generated constructor stub
         m_hid = new Gamepad(port);
     }
 
@@ -26,12 +25,19 @@ public class CommandGamepad extends GenericHID{
         return m_hid;
     }
 
+    public double getLeftX() {
+        return m_hid.getLeftX();
+    }
     public double getLeftY() {
         return m_hid.getLeftY();
     }
 
     public double getRightX() {
         return m_hid.getRightX();
+    }
+    
+    public double getRightY() {
+        return m_hid.getRightY();
     }
 
     public Trigger LB() {
@@ -41,6 +47,15 @@ public class CommandGamepad extends GenericHID{
     public Trigger LB(EventLoop loop) {
         return m_hid.LB(loop).castTo(Trigger::new);
     }
+
+    public Trigger RB() {
+        return RB(CommandScheduler.getInstance().getDefaultButtonLoop());
+    }
+
+    public Trigger RB(EventLoop loop) {
+        return m_hid.RB(loop).castTo(Trigger::new);
+    }
+
 
 
 }

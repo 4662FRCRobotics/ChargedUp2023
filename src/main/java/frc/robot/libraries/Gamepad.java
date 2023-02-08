@@ -134,16 +134,14 @@ public class Gamepad extends GenericHID {
     return new BooleanEvent(loop, () -> getLB());
   }
 
-  public boolean getLBPressed() {
-    return getRawButtonPressed(ButtonType.kLB.value);
-  }
-
-  public boolean getLBReleased() {
-    return getRawButtonReleased(ButtonType.kLB.value);
-  }
-
   public boolean getRB() {
     return getRawButton(ButtonType.kRB.value);
+  }
+
+  
+  @SuppressWarnings("MethodName")
+  public BooleanEvent RB(EventLoop loop) {
+    return new BooleanEvent(loop, () -> getRB());
   }
 
  /*  public boolean getLT() {
