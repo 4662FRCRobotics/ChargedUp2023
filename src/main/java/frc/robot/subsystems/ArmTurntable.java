@@ -40,7 +40,7 @@ public class ArmTurntable extends SubsystemBase {
 
   public boolean isTurntableLeft() {
     // left limit switch
-    return true;
+    return m_TurnTableMotor.isFwdLimitSwitchClosed() ==1;
   }
 
   public boolean isTurnableRight() {
