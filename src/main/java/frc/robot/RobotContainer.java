@@ -9,6 +9,7 @@ import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.libraries.CommandGamepad;
 import frc.robot.libraries.ConsoleAuto;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,8 +52,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   //private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final Gamepad m_driverController = new Gamepad(
-      OperatorConstants.kDriverControllerPort);
+  private final CommandGamepad m_driverController = new CommandGamepad(OperatorConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -62,19 +62,14 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(
       Commands.run(
         () ->
-        m_robotDrive.arcadeDrive(m_driverController.getLeftY()*(1-((m_driverController.getRightY()+1)*.25)), -m_driverController.getRightX()*(1-((m_driverController.getRightY()+1)*.25))),
+        m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()),
          m_robotDrive)
         );
     //m_drive.arcadeDrive(m_driverController.getLeftY()*(1-((m_driverController.getRightY()+1)*.25)), -m_driverController.getRightX()*(1-((m_driverController.getRightY()+1)*.25))),
     //     m_drive)
             //m_drive.arcadeDrive((m_driverController.getY()*-1*(1-((m_driverController.getThrottle()+1)*.25))), -m_driverController.getZ()), m_drive)
     // Configure the trigger bindings
-    configureBindings(
-m_driverController
-    .getLB()
-    .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kLOW_GEAR_SPEED)))
-    .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
-    );
+    configureBindings();
 
   }
 
@@ -99,6 +94,12 @@ m_driverController
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
+    m_driverController
+    .LB()
+    .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kLOW_GEAR_SPEED)))
+    .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
+    ;
+    
   }
 
   /**

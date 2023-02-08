@@ -4,7 +4,13 @@
 
 package frc.robot.libraries;
 
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.hal.HAL;
+import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -67,6 +73,7 @@ public class Gamepad extends GenericHID {
 
   public Gamepad(final int port) {
     super(port);
+    //HAL.report(tResourceType.kResourceType_l, port + 1); no gamepad
 
     m_axes[AxisType.kLeftX.value] = kLeftHorizontalAxis;
     m_axes[AxisType.kLeftY.value] = kLeftVerticalAxis;
@@ -118,8 +125,21 @@ public class Gamepad extends GenericHID {
     return getRawButton(ButtonType.kY.value);
   }
 
-  public Trigger getLB() {
-    return (getRawButton(ButtonType.kLB.value).castTo(Trigger::new));
+  public boolean getLB() {
+    return getRawButton(ButtonType.kLB.value);
+  }
+
+  @SuppressWarnings("MethodName")
+  public BooleanEvent LB(EventLoop loop) {
+    return new BooleanEvent(loop, () -> getLB());
+  }
+
+  public boolean getLBPressed() {
+    return getRawButtonPressed(ButtonType.kLB.value);
+  }
+
+  public boolean getLBReleased() {
+    return getRawButtonReleased(ButtonType.kLB.value);
   }
 
   public boolean getRB() {

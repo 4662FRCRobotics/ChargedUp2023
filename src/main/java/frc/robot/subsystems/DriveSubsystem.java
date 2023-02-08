@@ -71,7 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void setMaxOutput(double maxOutput) {
-    m_drive.setMaxOutput(maxOutput);
+    //m_drive.setMaxOutput(maxOutput);
   }
 
 }
