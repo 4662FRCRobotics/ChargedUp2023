@@ -21,9 +21,11 @@ public class DriveSubsystem extends SubsystemBase {
   private CANSparkMax m_leftController2;
   private CANSparkMax m_rightController1;
   private CANSparkMax m_rightController2;
-  private DifferentialDrive  m_differentialdrive;
+  private DifferentialDrive m_differentialdrive;
+  private double m_throttle;
 
   public DriveSubsystem() {
+    m_throttle= DriveConstants.kMEDIUM_GEAR_SPEED;
     m_leftController1 = new CANSparkMax(DriveConstants.kLeftMotor1Port, MotorType.kBrushless);
     m_leftController2 = new CANSparkMax(DriveConstants.kLeftMotor2Port, MotorType.kBrushless);
     m_rightController1 = new CANSparkMax(DriveConstants.kRightMotor1Port, MotorType.kBrushless);
@@ -48,7 +50,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftController2.setSmartCurrentLimit(DriveConstants.kCURRENT_LIMT);
     m_rightController1.setSmartCurrentLimit(DriveConstants.kCURRENT_LIMT);
     m_rightController2.setSmartCurrentLimit(DriveConstants.kCURRENT_LIMT);
-    
+
     m_leftController2.follow(m_leftController1);
     m_rightController2.follow(m_rightController1);
     m_differentialdrive = new DifferentialDrive(m_leftController1, m_rightController1);
@@ -64,14 +66,16 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void arcadeDrive(double velocity, double heading) {
-    m_differentialdrive.arcadeDrive(velocity, -1 * heading);
-    
+    m_differentialdrive.arcadeDrive(velocity*m_throttle, -1 * heading*m_throttle);
+
     // System.out.println("velocity="+velocity);
     // System.out.println("heading="+heading);
+    System.out.println("throttle="+m_throttle);
   }
 
   public void setMaxOutput(double maxOutput) {
-    //m_drive.setMaxOutput(maxOutput);
+    // m_drive.setMaxOutput(maxOutput);
+    m_throttle= maxOutput;
   }
 
 }

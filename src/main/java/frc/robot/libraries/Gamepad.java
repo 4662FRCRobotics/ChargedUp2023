@@ -113,16 +113,34 @@ public class Gamepad extends GenericHID {
     return getRawButton(ButtonType.kX.value);
   }
 
+  @SuppressWarnings("MethodName")
+  public BooleanEvent X (EventLoop loop) {
+    return new BooleanEvent(loop, () -> getX());
+  }
+
   public boolean getA() {
     return getRawButton(ButtonType.kA.value);
+  }
+
+  @SuppressWarnings("MethodName")
+  public BooleanEvent A (EventLoop loop) {
+    return new BooleanEvent(loop, () -> getA());
   }
 
   public boolean getB() {
     return getRawButton(ButtonType.kB.value);
   }
-
+  @SuppressWarnings("MethodName")
+  public BooleanEvent B(EventLoop loop) {
+    return new BooleanEvent(loop, () -> getB());
+  }
   public boolean getY() {
     return getRawButton(ButtonType.kY.value);
+  }
+
+  @SuppressWarnings("MethodName")
+  public BooleanEvent Y(EventLoop loop) {
+    return new BooleanEvent(loop, () -> getY());
   }
 
   public boolean getLB() {
@@ -156,15 +174,35 @@ public class Gamepad extends GenericHID {
     return getRawButton(ButtonType.kBack.value);
   }
 
+  @SuppressWarnings("MethodName")
+  public BooleanEvent Back (EventLoop loop) {
+    return new BooleanEvent(loop, () -> getBack());
+  }
   public boolean getStart() {
     return getRawButton(ButtonType.kX.value);
+  }
+
+  @SuppressWarnings("MethodName")
+  public BooleanEvent Start (EventLoop loop) {
+    return new BooleanEvent(loop, () -> getStart());
   }
 
   public boolean getLJB() {
     return getRawButton(ButtonType.kLJB.value);
   }
 
+  @SuppressWarnings("MethodName")
+  public BooleanEvent LJB(EventLoop loop) {
+    return new BooleanEvent(loop, () -> getLJB());
+  }
+
   public boolean getRJB() {
     return getRawButton(ButtonType.kRJB.value);
   }
+
+  @SuppressWarnings("MethodName")
+  public BooleanEvent RJB(EventLoop loop) {
+    return new BooleanEvent(loop, () -> getRJB());
+  }
+
 }

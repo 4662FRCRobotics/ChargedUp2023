@@ -19,23 +19,23 @@ import frc.robot.libraries.Gamepad;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
-ON LOGITECH F310 CONTROLLER:
-
-a = 1 (Green)
-B = 2   (Red)
-X = 3  (Blue)
-Y = 4   (Yellow)
-LB = 5 (Left Bumper: top button)
-RB = 6  (Right-Bumper: top button)
-Select/Back = 7 (Above left joystick) 
-Start = 8 (Above right joystick)
-LJB = 9 (Press left joystick)
-RJB = 10   (Press right joystick)
-
-Left Joystick Vertical Axis = 1
-Left Joystick Horizontal Axis = 0
-Right Joystick Vertical Axis = 5
-Right Joystick Horizontal Axis = 4
+ * ON LOGITECH F310 CONTROLLER:
+ * 
+ * A = 1 (Green)
+ * B = 2 (Red)
+ * X = 3 (Blue)
+ * Y = 4 (Yellow)
+ * LB = 5 (Left Bumper: top button)
+ * RB = 6 (Right-Bumper: top button)
+ * Select/Back = 7 (Above left joystick)
+ * Start = 8 (Above right joystick)
+ * LJB = 9 (Press left joystick)
+ * RJB = 10 (Press right joystick)
+ * 
+ * Left Joystick Vertical Axis = 1
+ * Left Joystick Horizontal Axis = 0
+ * Right Joystick Vertical Axis = 5
+ * Right Joystick Horizontal Axis = 4
  */
 public class RobotContainer {
 
@@ -50,7 +50,8 @@ public class RobotContainer {
   private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  //private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
+  // private final Joystick m_driverController = new
+  // Joystick(OperatorConstants.kDriverControllerPort);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandGamepad m_driverController = new CommandGamepad(OperatorConstants.kDriverControllerPort);
 
@@ -60,14 +61,14 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_robotDrive.setDefaultCommand(
-      Commands.run(
-        () ->
-        m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()),
-         m_robotDrive)
-        );
-    //m_drive.arcadeDrive(m_driverController.getLeftY()*(1-((m_driverController.getRightY()+1)*.25)), -m_driverController.getRightX()*(1-((m_driverController.getRightY()+1)*.25))),
-    //     m_drive)
-            //m_drive.arcadeDrive((m_driverController.getY()*-1*(1-((m_driverController.getThrottle()+1)*.25))), -m_driverController.getZ()), m_drive)
+        Commands.run(
+            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()),
+            m_robotDrive));
+    // m_drive.arcadeDrive(m_driverController.getLeftY()*(1-((m_driverController.getRightY()+1)*.25)),
+    // -m_driverController.getRightX()*(1-((m_driverController.getRightY()+1)*.25))),
+    // m_drive)
+    // m_drive.arcadeDrive((m_driverController.getY()*-1*(1-((m_driverController.getThrottle()+1)*.25))),
+    // -m_driverController.getZ()), m_drive)
     // Configure the trigger bindings
     configureBindings();
 
@@ -90,16 +91,18 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
     m_driverController
-    .LB()
-    .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kLOW_GEAR_SPEED)))
-    .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
-    ;
-    
+        .LB()
+        .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kLOW_GEAR_SPEED)))
+        .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
+m_driverController
+.RB()
+
+.onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
+.onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
   }
 
   /**
@@ -107,12 +110,13 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutoSelect(){
+  public Command getAutoSelect() {
     return m_autoSelect;
   }
+
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    Command autoCommand = null; 
+    Command autoCommand = null;
     return autoCommand;
   }
 }
