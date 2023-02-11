@@ -73,6 +73,8 @@ public static class ArmConstants {
   public static final int kShoulderPort = 12;
   public static final int kELBOW_PORT = 11;
   public static final int kELBOW_ANGLE_PORT=0;
+  public static final double kBUMPER_SETPOINT = .3;
+  public static final double kELBOW_TOP_LIMIT= .7;
 }
   public static class OperatorConstants {
 

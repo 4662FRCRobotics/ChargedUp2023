@@ -53,7 +53,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("angle of encoder", m_elbowAngle.getAbsolutePosition());
+    SmartDashboard.putNumber("angle of elbow encoder", m_elbowAngle.getAbsolutePosition());
     // This method will be called once per scheduler run
   }
 
@@ -66,7 +66,14 @@ public class ArmJointsSubsystem extends SubsystemBase {
     // direct test of elbow sensor or depend on command? may be non-standard to
     // direct test
     // set motor controller
-    m_ShoulderMotor.set(speed);
+    if (speed > 0) {
+      if (m_elbowAngle.getAbsolutePosition() > Constants.ArmConstants.kBUMPER_SETPOINT) {
+        m_ShoulderMotor.set(speed);
+      }
+    } else {
+      m_ShoulderMotor.set(speed);
+    }
+
   }
 
   public boolean isShoulderParked() {
@@ -80,8 +87,31 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_isArmExtended = m_ShoulderMotor.isFwdLimitSwitchClosed() == 1;
     return m_isArmExtended;
   }
-
+/*
+ *speed <0 is back  
+ *elbow angle is asanding num 
+ */
   public void moveElbow(double speed) {
+
+    if (speed < 0) {
+      //arm is moving back
+      if (isShoulderParked()) {
+        m_elbow.set(speed);
+      } else {
+        if (m_elbowAngle.getAbsolutePosition() > Constants.ArmConstants.kBUMPER_SETPOINT) {
+          m_elbow.set(speed);
+        } else {
+          
+          m_elbow.set(0);
+        }
+      }
+    }else{
+      //arm is moving out
+      if (m_elbowAngle.getAbsolutePosition() < Constants.ArmConstants.kELBOW_TOP_LIMIT){
+        m_elbow.set(speed);
+      }
+    }
+
     m_elbow.set(speed);
   }
 
