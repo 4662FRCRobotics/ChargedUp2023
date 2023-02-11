@@ -69,6 +69,11 @@ public final class Constants {
      * public static final double kKEEP_HEADING_TOLERANCE = 1;
      */
 }
+public static class ArmConstants {
+  public static final int kShoulderPort = 10;
+  public static final int kELBOW_PORT = 11;
+  public static final int kELBOW_ANGLE_PORT=12;
+}
   public static class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;

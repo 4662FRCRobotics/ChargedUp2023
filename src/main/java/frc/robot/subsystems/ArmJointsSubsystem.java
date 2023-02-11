@@ -4,7 +4,17 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxLimitSwitch;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
 
 public class ArmJointsSubsystem extends SubsystemBase {
   /** Creates a new ArmShoulderSubsystem. */
@@ -13,11 +23,28 @@ public class ArmJointsSubsystem extends SubsystemBase {
    * limit switch on back and front 
    * motion limits - only move when elbow has forearm extended past bumper
    */
-  m_shoulder = new 
+ 
+   private WPI_TalonSRX m_ShoulderMotor;
+  private CANSparkMax m_elbow;
+  
+  private SparkMaxLimitSwitch m_elbowRevLimit;
+  private SparkMaxLimitSwitch m_elbowFwdLimit;
+  private DutyCycleEncoder m_elbowAngle;
+
   public ArmJointsSubsystem() {
-    /*
-     * define the controller, sensors, and defaults
-     */
+   m_ShoulderMotor = new WPI_TalonSRX(Constants.ArmConstants.kShoulderPort);
+    m_elbow = new CANSparkMax(Constants.ArmConstants.kELBOW_PORT, MotorType.kBrushless);
+
+m_ShoulderMotor.configForwardLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
+m_ShoulderMotor.configReverseLimitSwitchSource(RemoteLimitSwitchSource.RemoteTalonSRX, LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
+
+m_elbowRevLimit = m_elbow.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+m_elbowFwdLimit = m_elbow.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+m_elbowFwdLimit.enableLimitSwitch(true);
+m_elbowRevLimit.enableLimitSwitch(true);
+
+m_elbowAngle = new DutyCycleEncoder(Constants.ArmConstants.kELBOW_ANGLE_PORT);
+
   }
 
   @Override
@@ -28,6 +55,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
   public void moveShoulder(double speed) {
     // direct test of elbow sensor or depend on command? may be non-standard to direct test
     //set motor controller
+    m_ShoulderMotor.set(speed);
   }
 
   public boolean isShoulderParked() {
