@@ -7,9 +7,11 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
+import frc.robot.subsystems.ArmJointsSubsystem;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.libraries.ConsoleAuto;
+import frc.robot.libraries.Gamepad;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -22,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+private final ArmJointsSubsystem m_ArmJointsSubsystem = new ArmJointsSubsystem();
 
   private final ConsoleAuto m_consoleAuto = new ConsoleAuto(OperatorConstants.kAUTONOMOUS_CONSOLE_PORT);
 
@@ -32,7 +35,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
-
+private final Gamepad m_operatorController = new Gamepad(OperatorConstants.kOPERATOR_CONTROLLER_PORT);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -47,6 +50,11 @@ public class RobotContainer {
             () -> m_robotDrive.arcadeDrive(
                 -m_driverController.getY() * (1 - ((m_driverController.getThrottle() + 1) * 0.25)), -m_driverController.getX()),
             m_robotDrive));
+            
+            m_ArmJointsSubsystem.setDefaultCommand(
+              Commands.run(
+                ()->m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY()), m_ArmJointsSubsystem)
+            );
   }
 
   /**

@@ -70,13 +70,14 @@ public final class Constants {
      */
 }
 public static class ArmConstants {
-  public static final int kShoulderPort = 10;
+  public static final int kShoulderPort = 12;
   public static final int kELBOW_PORT = 11;
-  public static final int kELBOW_ANGLE_PORT=12;
+  public static final int kELBOW_ANGLE_PORT=0;
 }
   public static class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;
+    public static final int kOPERATOR_CONTROLLER_PORT = 1;
     public static final int kAUTONOMOUS_CONSOLE_PORT = 2;
   }
 }
