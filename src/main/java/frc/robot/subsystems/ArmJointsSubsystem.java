@@ -6,14 +6,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ArmShoulderSubsystem extends SubsystemBase {
+public class ArmJointsSubsystem extends SubsystemBase {
   /** Creates a new ArmShoulderSubsystem. */
   /*
    * single motor - motor controller tbd
    * limit switch on back and front 
    * motion limits - only move when elbow has forearm extended past bumper
    */
-  public ArmShoulderSubsystem() {
+  m_shoulder = new 
+  public ArmJointsSubsystem() {
     /*
      * define the controller, sensors, and defaults
      */
