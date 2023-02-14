@@ -11,7 +11,7 @@ import frc.robot.subsystems.ArmJointsSubsystem;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.libraries.ConsoleAuto;
-import frc.robot.libraries.Gamepad;
+import frc.robot.libraries.GamepadX;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -35,7 +35,7 @@ private final ArmJointsSubsystem m_ArmJointsSubsystem = new ArmJointsSubsystem()
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
-private final Gamepad m_operatorController = new Gamepad(OperatorConstants.kOPERATOR_CONTROLLER_PORT);
+private final GamepadX m_operatorController = new GamepadX(OperatorConstants.kOPERATOR_CONTROLLER_PORT);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */

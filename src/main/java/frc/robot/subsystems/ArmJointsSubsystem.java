@@ -89,7 +89,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
   }
 /*
  *speed <0 is back  
- *elbow angle is asanding num 
+ *elbow angle is an asanding num 
  */
   public void moveElbow(double speed) {
 
