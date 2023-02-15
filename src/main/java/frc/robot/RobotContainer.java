@@ -9,6 +9,7 @@ import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Vision;
 import frc.robot.libraries.ConsoleAuto;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +27,7 @@ public class RobotContainer {
   private final ConsoleAuto m_consoleAuto = new ConsoleAuto(OperatorConstants.kAUTONOMOUS_CONSOLE_PORT);
 
   private final AutonomousSubsystem m_autonomous = new AutonomousSubsystem(m_consoleAuto, m_robotDrive);
+  private final Vision m_vision = new Vision();
 
   private final AutoSelect m_autoSelect = new AutoSelect(m_autonomous);
   private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive);
@@ -45,7 +47,8 @@ public class RobotContainer {
         // hand, and turning controlled by the right.
         Commands.run(
             () -> m_robotDrive.arcadeDrive(
-                -m_driverController.getY() * (1 - ((m_driverController.getThrottle() + 1) * 0.25)), -m_driverController.getX()),
+                -m_driverController.getY() * (1 - ((m_driverController.getThrottle() + 1) * 0.25)),
+                -m_driverController.getX()),
             m_robotDrive));
   }
 
@@ -77,9 +80,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutoSelect(){
+  public Command getAutoSelect() {
     return m_autoSelect;
   }
+
   public Command getAutonomousCommand() {
     return m_autoCommand;
     // An example command will be run in autonomous
