@@ -11,17 +11,18 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Add your docs here. */
-public class CommandGamepad extends GenericHID{
+public class CommandGamepadX extends GenericHID{
+// use the "X" mode on the gamepad, the swich is on the bottom.
 
-    private final Gamepad m_hid;
+    private final GamepadX m_hid;
 
-    public CommandGamepad(int port) {
+    public CommandGamepadX(int port) {
         super(port);
-        m_hid = new Gamepad(port);
+        m_hid = new GamepadX(port);
     }
 
     //@Override
-    public Gamepad getHID() {
+    public GamepadX getHID() {
         return m_hid;
     }
 

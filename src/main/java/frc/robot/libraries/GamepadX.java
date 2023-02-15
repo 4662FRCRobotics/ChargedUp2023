@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class Gamepad extends GenericHID {
+public class GamepadX extends GenericHID {
   /** Creates a new Gamepad. */
   public static final byte kLeftHorizontalAxis = 0;
   public static final byte kLeftVerticalAxis = 1;
@@ -71,7 +71,7 @@ public class Gamepad extends GenericHID {
 
   private final byte[] m_axes = new byte[AxisType.values().length];
 
-  public Gamepad(final int port) {
+  public GamepadX(final int port) {
     super(port);
     //HAL.report(tResourceType.kResourceType_l, port + 1); no gamepad
 

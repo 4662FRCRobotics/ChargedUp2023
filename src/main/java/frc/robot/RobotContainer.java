@@ -9,13 +9,13 @@ import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.libraries.CommandGamepad;
+import frc.robot.libraries.CommandGamepadX;
 import frc.robot.libraries.ConsoleAuto;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.libraries.Gamepad;
+import frc.robot.libraries.GamepadX;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -53,7 +53,7 @@ public class RobotContainer {
   // private final Joystick m_driverController = new
   // Joystick(OperatorConstants.kDriverControllerPort);
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandGamepad m_driverController = new CommandGamepad(OperatorConstants.kDriverControllerPort);
+  private final CommandGamepadX m_driverController = new CommandGamepadX(OperatorConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
