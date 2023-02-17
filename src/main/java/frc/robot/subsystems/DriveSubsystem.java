@@ -161,7 +161,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setMaxOutput(double maxOutput) {
     // m_drive.setMaxOutput(maxOutput);
-    m_throttle= maxOutput;
+    m_throttle = maxOutput;
+  }
+
   public void tankDriveVolts(double leftVolt, double rightVolt) {
     m_leftController1.setVoltage(leftVolt);
     m_rightController1.setVoltage(rightVolt);
