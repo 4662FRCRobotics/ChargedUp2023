@@ -6,9 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class End extends CommandBase {
-  /** Creates a new End. */
-  public End() {
+public class AutoDriveDistance extends CommandBase {
+  /** Creates a new AutoDriveDistance. */
+  public AutoDriveDistance() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -27,6 +27,6 @@ public class End extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
