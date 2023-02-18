@@ -23,16 +23,18 @@ public final class Constants {
 
     public static final double kRAMP_RATE = 1.0;
     public static final int kCURRENT_LIMT = 40;
+    public static final double kMAX_VOLTAGE = 10;
+    
     public static final double kTIRE_SIZE_IN = 6.0;
     public static final double kTIRE_SIZE_M = Units.inchesToMeters(kTIRE_SIZE_IN);
     public static final int kPULSE_PER_ROTATION = 1;
 
-    public static final double kLOW_GEAR_REDUCTION = (42.0 / 12.0) * (60.0 / 14.0);
-    public static final double kHIGH_GEAR_REDUCTION = (42.0 / 12.0) * (50.0 / 24.0);
-    public static final double kENCODER_DISTANCE_PER_PULSE_M_HIGH = ((double) kPULSE_PER_ROTATION / kHIGH_GEAR_REDUCTION);
-    public static final double kENCODER_DISTANCE_PER_PULSE_M_LOW = ((double) kPULSE_PER_ROTATION   / kLOW_GEAR_REDUCTION);
+    public static final double kGEAR_REDUCTION = (52.0 / 12.0) * (68.0 / 30.0);
+    //public static final double kHIGH_GEAR_REDUCTION = (42.0 / 12.0) * (50.0 / 24.0);
+    //public static final double kENCODER_DISTANCE_PER_PULSE_M_HIGH = ((double) kPULSE_PER_ROTATION / kHIGH_GEAR_REDUCTION);
+    public static final double kENCODER_DISTANCE_PER_PULSE_M = ((double) kPULSE_PER_ROTATION   / kGEAR_REDUCTION);
     // * (kTIRE_SIZE_M * Math.PI);
-    public static final double kTRACK_WIDTH_M = 0.64;
+    public static final double kTRACK_WIDTH_M = 0.5;
 
     // public static final DifferentialDriveKinematics K_DRIVE_KINEMATICS = new
     // DifferentialDriveKinematics(kTRACK_WIDTH_M);
@@ -74,5 +76,10 @@ public final class Constants {
 
     public static final int kDriverControllerPort = 0;
     public static final int kAUTONOMOUS_CONSOLE_PORT = 2;
+  }
+
+  public static class ConsoleConstants {
+    public static final int kPLACE_GAMEPIECE_SW = 1;
+    public static final int kDRIVE_PATTERN_1_SW = 2;
   }
 }

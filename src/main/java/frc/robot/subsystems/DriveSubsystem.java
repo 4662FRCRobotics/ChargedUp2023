@@ -4,11 +4,21 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.kauailabs.navx.frc.AHRS;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -23,6 +33,16 @@ public class DriveSubsystem extends SubsystemBase {
   private CANSparkMax m_rightController2;
   private DifferentialDrive m_differentialdrive;
   private double m_throttle;
+  private AHRS m_navX;
+  private SimpleMotorFeedforward m_feedForward;
+  private DifferentialDriveVoltageConstraint m_autoVoltageConstraint;
+  private TrajectoryConfig m_trajectoryConfig;
+  private RelativeEncoder m_leftEncoder1;
+  private RelativeEncoder m_rightEncoder1;
+  private double m_leftEncoderSign;
+  private double m_rightEncoderSign;
+  private DifferentialDriveOdometry m_diffOdometry;
+  private double m_driveDistance;
 
   public DriveSubsystem() {
     m_throttle= DriveConstants.kMEDIUM_GEAR_SPEED;
@@ -59,10 +79,76 @@ public class DriveSubsystem extends SubsystemBase {
     // super(
     // The PIDController used by the subsystem
     // new PIDController(0, 0, 0));
+    m_leftEncoder1 = m_leftController1.getEncoder();
+    m_rightEncoder1 = m_rightController1.getEncoder();
+    m_diffOdometry = new DifferentialDriveOdometry(new Rotation2d(), m_driveDistance, m_driveDistance);
+    m_navX = new AHRS(SerialPort.Port.kMXP);
+
+    m_feedForward = new SimpleMotorFeedforward(
+      DriveConstants.kS_VOLTS,
+      DriveConstants.kV_VOLT_SECOND_PER_METER,
+      DriveConstants.kA_VOLT_SEONDS_SQUARED_PER_METER);
+
+    //System.out.printf("Encoder dist per pulse %.4f", DriveNormSubsystemConst.kENCODER_DISTANCE_PER_PULSE_M);
+
+    m_autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+      m_feedForward,
+      DriveConstants.kDRIVE_KINEMATICS,
+      DriveConstants.kMAX_VOLTAGE);
+      
+    m_trajectoryConfig = new TrajectoryConfig(
+      DriveConstants.kMAX_SPEED_METERS_PER_SECOND,
+      DriveConstants.kMAX_ACCELERATION_METERS_PER_SECOND_SQUARED)
+      .setKinematics(DriveConstants.kDRIVE_KINEMATICS)
+      .addConstraint(m_autoVoltageConstraint);
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Yaw", getYaw());
+    SmartDashboard.putNumber("Pitch", getPitch());
+    SmartDashboard.putNumber("Roll", getRoll());
+    SmartDashboard.putNumber("Velocity", getVelocity());
+    SmartDashboard.putNumber("Left Distance", getLeftDistance());
+    SmartDashboard.putNumber("Right Distance", getRightDistance());
+    // System.out.println(getPitch());
+
+  }
+
+  public TrajectoryConfig getTrajConfig() {
+    return m_trajectoryConfig;
+  }
+
+  public Pose2d getPos() {
+    return  m_diffOdometry.getPoseMeters();
+
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_diffOdometry.resetPosition(new Rotation2d(0), m_leftController1.getEncoder().getPosition(),
+        m_rightController1.getEncoder().getPosition(), pose);
+  }
+
+  public double getYaw() {
+    return m_navX.getYaw();
+  }
+
+  public double getPitch() {
+    return m_navX.getPitch();
+  }
+
+  public double getRoll() {
+    return m_navX.getRoll();
+  }
+
+  public double getVelocity() {
+    return m_navX.getVelocityY();
+  }
+
+  public double getAngleK() {
+
+    return m_navX.getAngle();
   }
 
   public void arcadeDrive(double velocity, double heading) {
@@ -70,12 +156,49 @@ public class DriveSubsystem extends SubsystemBase {
 
     // System.out.println("velocity="+velocity);
     // System.out.println("heading="+heading);
-    System.out.println("throttle="+m_throttle);
+    //System.out.println("throttle="+m_throttle);
   }
 
   public void setMaxOutput(double maxOutput) {
     // m_drive.setMaxOutput(maxOutput);
-    m_throttle= maxOutput;
+    m_throttle = maxOutput;
+  }
+
+  public void tankDriveVolts(double leftVolt, double rightVolt) {
+    m_leftController1.setVoltage(leftVolt);
+    m_rightController1.setVoltage(rightVolt);
+    m_differentialdrive.feed();
+  }
+
+  private Rotation2d getRotation2dK() {
+    // note the negation of the angle is required because the wpilib convention
+    // uses left positive rotation while gyros read right positive
+    return Rotation2d.fromDegrees(-getAngleK());
+  }
+
+  public void resetDrive() {
+    resetAngle();
+    resetEncoders();
+  }
+
+  private void resetAngle() {
+    m_navX.zeroYaw();
+    // need to add reset of odometry and encoders
+  }
+
+  private double getLeftDistance() {
+    return m_leftEncoderSign * m_leftEncoder1.getPosition() * DriveConstants.kENCODER_DISTANCE_PER_PULSE_M;
+  }
+
+  private double getRightDistance() {
+    return m_rightEncoder1.getPosition() * DriveConstants.kENCODER_DISTANCE_PER_PULSE_M;
+    // return m_rightEncoderSign * m_rightEncoder1.getPosition() *
+    // DriveConstants.kENCODER_DISTANCE_PER_PULSE_M;
+  }
+
+  private void resetEncoders() {
+    m_leftEncoder1.setPosition(0);
+    m_rightEncoder1.setPosition(0);
   }
 
 }

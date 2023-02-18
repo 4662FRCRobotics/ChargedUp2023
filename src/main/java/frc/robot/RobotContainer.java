@@ -116,7 +116,7 @@ m_driverController
 
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    Command autoCommand = null;
-    return autoCommand;
+    //Command autoCommand = ;
+    return m_autoCommand;
   }
 }
