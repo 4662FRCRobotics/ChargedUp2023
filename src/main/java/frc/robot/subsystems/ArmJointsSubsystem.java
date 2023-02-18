@@ -6,16 +6,20 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-import com.ctre.phoenix.motorcontrol.RemoteLimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 
 public class ArmJointsSubsystem extends SubsystemBase {
   /** Creates a new ArmShoulderSubsystem. */
@@ -27,33 +31,47 @@ public class ArmJointsSubsystem extends SubsystemBase {
   private boolean m_isArmParked;
   private boolean m_isArmExtended;
   private WPI_TalonSRX m_ShoulderMotor;
-  private CANSparkMax m_elbow;
+  private CANSparkMax m_elbowMotor;
 
   private SparkMaxLimitSwitch m_elbowRevLimit;
   private SparkMaxLimitSwitch m_elbowFwdLimit;
-  private DutyCycleEncoder m_elbowAngle;
+  private SparkMaxAbsoluteEncoder m_elbowAngle;
+  private SparkMaxPIDController m_elbowPIDCntl;
+  private SimpleMotorFeedforward m_elbowFeedforward;
 
   public ArmJointsSubsystem() {
     m_ShoulderMotor = new WPI_TalonSRX(Constants.ArmConstants.kShoulderPort);
-    m_elbow = new CANSparkMax(Constants.ArmConstants.kELBOW_PORT, MotorType.kBrushless);
+    m_elbowMotor = new CANSparkMax(Constants.ArmConstants.kELBOW_PORT, MotorType.kBrushless);
 
     m_ShoulderMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
         LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
     m_ShoulderMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
         LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
 
-    m_elbowRevLimit = m_elbow.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    m_elbowFwdLimit = m_elbow.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    m_elbowRevLimit = m_elbowMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    m_elbowFwdLimit = m_elbowMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     m_elbowFwdLimit.enableLimitSwitch(true);
     m_elbowRevLimit.enableLimitSwitch(true);
 
-    m_elbowAngle = new DutyCycleEncoder(Constants.ArmConstants.kELBOW_ANGLE_PORT);
+    //m_elbowAngle = new DutyCycleEncoder(Constants.ArmConstants.kELBOW_ANGLE_PORT);
+    m_elbowAngle = m_elbowMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+    m_elbowAngle.setPositionConversionFactor(ArmConstants.kELBOW_ANGLE_CONVERSION);
+    m_elbowPIDCntl = m_elbowMotor.getPIDController();
+    m_elbowPIDCntl.setFeedbackDevice(m_elbowAngle);
+    m_elbowPIDCntl.setP(ArmConstants.kELBOW_CNTL_P);
+    m_elbowPIDCntl.setI(ArmConstants.kELBOW_CNTL_I);
+    m_elbowPIDCntl.setD(ArmConstants.kELBOW_CNTL_D);
+    m_elbowPIDCntl.setIZone(ArmConstants.kELBOW_CNTL_IZONE);
+    m_elbowPIDCntl.setOutputRange(ArmConstants.kELBOW_CNTL_MIN_OUT, ArmConstants.kELBOW_CNTL_MAX_OUT);
+    m_elbowFeedforward = new SimpleMotorFeedforward(ArmConstants.kELBOW_FF_S_VOLTS,
+      ArmConstants.kELBOW_FF_V_VOLT_SECOND_PER_UNIT,
+      ArmConstants.kELBOW_FF_A_VOLT_SECOND_SQ_PER_UNIT);
 
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("angle of elbow encoder", m_elbowAngle.getAbsolutePosition());
+    SmartDashboard.putNumber("angle of elbow encoder", m_elbowAngle.getPosition());
     // This method will be called once per scheduler run
   }
 
@@ -67,7 +85,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     // direct test
     // set motor controller
     if (speed > 0) {
-      if (m_elbowAngle.getAbsolutePosition() > Constants.ArmConstants.kBUMPER_SETPOINT) {
+      if (m_elbowAngle.getPosition() > Constants.ArmConstants.kBUMPER_SETPOINT) {
         m_ShoulderMotor.set(speed);
       }
     } else {
@@ -96,23 +114,30 @@ public class ArmJointsSubsystem extends SubsystemBase {
     if (speed < 0) {
       //arm is moving back
       if (isShoulderParked()) {
-        m_elbow.set(speed);
+        m_elbowMotor.set(speed);
       } else {
-        if (m_elbowAngle.getAbsolutePosition() > Constants.ArmConstants.kBUMPER_SETPOINT) {
-          m_elbow.set(speed);
+        if (m_elbowAngle.getPosition() > Constants.ArmConstants.kBUMPER_SETPOINT) {
+          m_elbowMotor.set(speed);
         } else {
           
-          m_elbow.set(0);
+          m_elbowMotor.set(0);
         }
       }
     }else{
       //arm is moving out
-      if (m_elbowAngle.getAbsolutePosition() < Constants.ArmConstants.kELBOW_TOP_LIMIT){
-        m_elbow.set(speed);
+      if (m_elbowAngle.getPosition() < Constants.ArmConstants.kELBOW_TOP_LIMIT){
+        m_elbowMotor.set(speed);
       }
     }
 
-    m_elbow.set(speed);
+    m_elbowMotor.set(speed);
+  }
+
+  public void setElbowStates(TrapezoidProfile.State elbowState) {
+    m_elbowPIDCntl.setReference(elbowState.position,
+      ControlType.kPosition,
+      0,
+      m_elbowFeedforward.calculate(elbowState.velocity));
   }
 
 }
