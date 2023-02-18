@@ -207,7 +207,7 @@ public class AutonomousSubsystem extends SubsystemBase {
 
   
     m_ConsoleAuto = consoleAuto;
-
+    m_drive = driveNorm;
     m_selectedCommand = m_autoSelectCommand[0];
     m_strCommand = m_selectedCommand.toString();
     m_autoCommand = new AutonomousCommandSelector<AutonomousSteps>();

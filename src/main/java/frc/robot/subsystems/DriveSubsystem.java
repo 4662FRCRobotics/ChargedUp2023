@@ -156,7 +156,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // System.out.println("velocity="+velocity);
     // System.out.println("heading="+heading);
-    System.out.println("throttle="+m_throttle);
+    //System.out.println("throttle="+m_throttle);
   }
 
   public void setMaxOutput(double maxOutput) {
