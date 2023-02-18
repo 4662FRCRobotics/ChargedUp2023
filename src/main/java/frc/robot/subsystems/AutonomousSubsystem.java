@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.ConsoleConstants;
 import frc.robot.commands.PlaceCone;
 import frc.robot.commands.RamseteDrivePath;
 import frc.robot.commands.WaitForCount;
@@ -229,12 +230,12 @@ public class AutonomousSubsystem extends SubsystemBase {
 
     m_placeConeM = new PlaceCone();
     m_autoCommand.addOption(AutonomousSteps.PLACECONEM, m_placeConeM);
-    m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM);
+    m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM, m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kPLACE_GAMEPIECE_SW));
    
     genTrajectory();
     m_drive3Path = new RamseteDrivePath(m_drive3Trajectory, kRESET_ODOMETRY, m_drive);
     m_autoCommand.addOption(AutonomousSteps.DRIVE3, m_drive3Path);
-    m_stepDrive3Path = new StepState(AutonomousSteps.DRIVE3);
+    m_stepDrive3Path = new StepState(AutonomousSteps.DRIVE3, m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kDRIVE_PATTERN_1_SW));
 
 
     // array group length must match the enum entries in AutonomousCommands

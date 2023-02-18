@@ -77,4 +77,9 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kAUTONOMOUS_CONSOLE_PORT = 2;
   }
+
+  public static class ConsoleConstants {
+    public static final int kPLACE_GAMEPIECE_SW = 1;
+    public static final int kDRIVE_PATTERN_1_SW = 2;
+  }
 }
