@@ -111,6 +111,17 @@ public class ArmJointsSubsystem extends SubsystemBase {
  */
   public void moveElbow(double speed) {
 
+    boolean isElbowMoveFwd = true;
+
+    if (speed > 0) {
+      isElbowMoveFwd = false;
+    }
+    if (canElbowMove(isElbowMoveFwd)) {
+      // set speed here
+    } else {
+      // stop elbow motor
+    }
+
     if (speed < 0) {
       //arm is moving back
       if (isShoulderParked()) {
@@ -134,10 +145,23 @@ public class ArmJointsSubsystem extends SubsystemBase {
   }
 
   public void setElbowStates(TrapezoidProfile.State elbowState) {
-    m_elbowPIDCntl.setReference(elbowState.position,
-      ControlType.kPosition,
-      0,
-      m_elbowFeedforward.calculate(elbowState.velocity));
+    // determine move direction
+    boolean isElbowMoveFwd = true;
+    if (canElbowMove(isElbowMoveFwd)) {
+      m_elbowPIDCntl.setReference(elbowState.position,
+        ControlType.kPosition,
+        0,
+        m_elbowFeedforward.calculate(elbowState.velocity));
+    }
+  }
+
+  public boolean canElbowMove(boolean isElbowMoveFwd) {
+    boolean isElbowMovable = true;
+    return isElbowMovable;
+  }
+
+  public void stopElbowMove() {
+    m_elbowMotor.stopMotor();
   }
 
 }

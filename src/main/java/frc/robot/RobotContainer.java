@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-private final ArmJointsSubsystem m_ArmJointsSubsystem = new ArmJointsSubsystem();
+  private final ArmJointsSubsystem m_ArmJointsSubsystem = new ArmJointsSubsystem();
 
   private final ConsoleAuto m_consoleAuto = new ConsoleAuto(OperatorConstants.kAUTONOMOUS_CONSOLE_PORT);
 
@@ -35,7 +35,7 @@ private final ArmJointsSubsystem m_ArmJointsSubsystem = new ArmJointsSubsystem()
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
-private final GamepadX m_operatorController = new GamepadX(OperatorConstants.kOPERATOR_CONTROLLER_PORT);
+  private final GamepadX m_operatorController = new GamepadX(OperatorConstants.kOPERATOR_CONTROLLER_PORT);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -51,10 +51,10 @@ private final GamepadX m_operatorController = new GamepadX(OperatorConstants.kOP
                 -m_driverController.getY() * (1 - ((m_driverController.getThrottle() + 1) * 0.25)), -m_driverController.getX()),
             m_robotDrive));
             
-            m_ArmJointsSubsystem.setDefaultCommand(
-              Commands.run(
-                ()->m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY()), m_ArmJointsSubsystem)
-            );
+    m_ArmJointsSubsystem.setDefaultCommand(
+      Commands.run(
+        ()->m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY()), m_ArmJointsSubsystem)
+    );
   }
 
   /**
@@ -72,11 +72,8 @@ private final GamepadX m_operatorController = new GamepadX(OperatorConstants.kOP
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
+   
+    //m_operatorController.Back() command - get gamepad branch for corrections
 
   }
 
