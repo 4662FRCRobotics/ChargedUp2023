@@ -61,13 +61,14 @@ public class RobotContainer {
   public RobotContainer() {
 
     m_robotDrive.setDefaultCommand(
-        Commands.run(
-            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()),
-            m_robotDrive));
+      Commands.run(
+          () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()),
+          m_robotDrive));
             
     m_ArmJointsSubsystem.setDefaultCommand(
       Commands.run(
-        ()->m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY()), m_ArmJointsSubsystem)
+        () -> m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY()),
+         m_ArmJointsSubsystem)
     );
 
     configureBindings();
@@ -99,6 +100,10 @@ public class RobotContainer {
     .RB()
     .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
     .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
+
+    m_operatorController
+      .Start()
+      .onTrue(Commands.runOnce(() -> m_ArmJointsSubsystem.stopArm(), m_ArmJointsSubsystem));
   }
 
   /**
