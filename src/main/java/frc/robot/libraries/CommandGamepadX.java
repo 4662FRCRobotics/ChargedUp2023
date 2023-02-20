@@ -4,15 +4,13 @@
 
 package frc.robot.libraries;
 
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Add your docs here. */
-public class CommandGamepadX extends GenericHID{
-// use the "X" mode on the gamepad, the swich is on the bottom.
+public class CommandGamepadX extends CommandGenericHID{
 
     private final GamepadX m_hid;
 

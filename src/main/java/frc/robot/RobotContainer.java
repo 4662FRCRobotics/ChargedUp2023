@@ -7,10 +7,12 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
+import frc.robot.subsystems.ArmJointsSubsystem;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.libraries.CommandGamepadX;
 import frc.robot.libraries.ConsoleAuto;
+import frc.robot.libraries.GamepadX;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -41,6 +43,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ArmJointsSubsystem m_ArmJointsSubsystem = new ArmJointsSubsystem();
 
   private final ConsoleAuto m_consoleAuto = new ConsoleAuto(OperatorConstants.kAUTONOMOUS_CONSOLE_PORT);
 
@@ -49,11 +52,8 @@ public class RobotContainer {
   private final AutoSelect m_autoSelect = new AutoSelect(m_autonomous);
   private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive);
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  // private final Joystick m_driverController = new
-  // Joystick(OperatorConstants.kDriverControllerPort);
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandGamepadX m_driverController = new CommandGamepadX(OperatorConstants.kDriverControllerPort);
+  private final CommandGamepadX m_operatorController = new CommandGamepadX(OperatorConstants.kOPERATOR_CONTROLLER_PORT);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -64,12 +64,12 @@ public class RobotContainer {
         Commands.run(
             () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()),
             m_robotDrive));
-    // m_drive.arcadeDrive(m_driverController.getLeftY()*(1-((m_driverController.getRightY()+1)*.25)),
-    // -m_driverController.getRightX()*(1-((m_driverController.getRightY()+1)*.25))),
-    // m_drive)
-    // m_drive.arcadeDrive((m_driverController.getY()*-1*(1-((m_driverController.getThrottle()+1)*.25))),
-    // -m_driverController.getZ()), m_drive)
-    // Configure the trigger bindings
+            
+    m_ArmJointsSubsystem.setDefaultCommand(
+      Commands.run(
+        ()->m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY()), m_ArmJointsSubsystem)
+    );
+
     configureBindings();
 
   }
@@ -89,20 +89,16 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
     m_driverController
         .LB()
         .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kLOW_GEAR_SPEED)))
         .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
-m_driverController
-.RB()
-
-.onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
-.onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
+        
+    m_driverController
+    .RB()
+    .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
+    .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
   }
 
   /**

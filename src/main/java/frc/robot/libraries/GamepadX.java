@@ -4,15 +4,10 @@
 
 package frc.robot.libraries;
 
-import java.util.function.BooleanSupplier;
-
-import edu.wpi.first.hal.HAL;
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class GamepadX extends GenericHID {
   /** Creates a new Gamepad. */
@@ -206,3 +201,4 @@ public class GamepadX extends GenericHID {
   }
 
 }
+

@@ -71,10 +71,36 @@ public final class Constants {
      * public static final double kKEEP_HEADING_D = 0.4;
      * public static final double kKEEP_HEADING_TOLERANCE = 1;
      */
-}
+  }
+  public static class ArmConstants {
+    public static final int kShoulderPort = 12;
+    public static final int kELBOW_PORT = 11;
+
+    //convert abs encoder angle to degrees just because
+    public static final double kELBOW_ANGLE_CONVERSION = 360;
+    public static final double kBUMPER_SETPOINT = 108;
+    public static final double kELBOW_TOP_LIMIT= 252;
+
+    public static final double kELBOW_CNTL_P = .15;
+    public static final double kELBOW_CNTL_I = 0;
+    public static final double kELBOW_CNTL_D = 3;
+    public static final double kELBOW_CNTL_IZONE = 0;
+    public static final double kELBOW_CNTL_FF = 0;
+    public static final double kELBOW_CNTL_MAX_OUT = 1.0;
+    public static final double kELBOW_CNTL_MIN_OUT = -1.0;
+
+    public static final double kELBOW_FF_S_VOLTS = 0.5;
+    public static final double kELBOW_FF_V_VOLT_SECOND_PER_UNIT = 1;
+    public static final double kELBOW_FF_A_VOLT_SECOND_SQ_PER_UNIT = .05;
+
+    public static final double kELBOW_MAX_SPEED_PER_SECOND = 0.5;
+    public static final double kELBOW_ACCELERATION_PER_SECOND_SQ = 0.25;
+
+  }
   public static class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;
+    public static final int kOPERATOR_CONTROLLER_PORT = 1;
     public static final int kAUTONOMOUS_CONSOLE_PORT = 2;
   }
 
