@@ -9,17 +9,36 @@ import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.libraries.CommandGamepadX;
 import frc.robot.libraries.ConsoleAuto;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.libraries.GamepadX;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
-
+ * ON LOGITECH F310 CONTROLLER:
+ * 
+ * A = 1 (Green)
+ * B = 2 (Red)
+ * X = 3 (Blue)
+ * Y = 4 (Yellow)
+ * LB = 5 (Left Bumper: top button)
+ * RB = 6 (Right-Bumper: top button)
+ * Select/Back = 7 (Above left joystick)
+ * Start = 8 (Above right joystick)
+ * LJB = 9 (Press left joystick)
+ * RJB = 10 (Press right joystick)
+ * 
+ * Left Joystick Vertical Axis = 1
+ * Left Joystick Horizontal Axis = 0
+ * Right Joystick Vertical Axis = 5
+ * Right Joystick Horizontal Axis = 4
  */
 public class RobotContainer {
+
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
@@ -31,22 +50,28 @@ public class RobotContainer {
   private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
+  // private final Joystick m_driverController = new
+  // Joystick(OperatorConstants.kDriverControllerPort);
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final CommandGamepadX m_driverController = new CommandGamepadX(OperatorConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
+    m_robotDrive.setDefaultCommand(
+        Commands.run(
+            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()),
+            m_robotDrive));
+    // m_drive.arcadeDrive(m_driverController.getLeftY()*(1-((m_driverController.getRightY()+1)*.25)),
+    // -m_driverController.getRightX()*(1-((m_driverController.getRightY()+1)*.25))),
+    // m_drive)
+    // m_drive.arcadeDrive((m_driverController.getY()*-1*(1-((m_driverController.getThrottle()+1)*.25))),
+    // -m_driverController.getZ()), m_drive)
     // Configure the trigger bindings
     configureBindings();
-    m_robotDrive.setDefaultCommand(
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
-        Commands.run(
-            () -> m_robotDrive.arcadeDrive(
-                -m_driverController.getY() * (1 - ((m_driverController.getThrottle() + 1) * 0.25)), -m_driverController.getX()),
-            m_robotDrive));
+
   }
 
   /**
@@ -69,7 +94,15 @@ public class RobotContainer {
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
+    m_driverController
+        .LB()
+        .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kLOW_GEAR_SPEED)))
+        .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
+m_driverController
+.RB()
 
+.onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
+.onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
   }
 
   /**
@@ -77,11 +110,13 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutoSelect(){
+  public Command getAutoSelect() {
     return m_autoSelect;
   }
+
   public Command getAutonomousCommand() {
-    return m_autoCommand;
     // An example command will be run in autonomous
+    //Command autoCommand = ;
+    return m_autoCommand;
   }
 }

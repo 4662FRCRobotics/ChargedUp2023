@@ -20,8 +20,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.ConsoleConstants;
 import frc.robot.commands.PlaceCone;
-//import frc.robot.commands.TrapazoidalDistanceDriveRobot;
+import frc.robot.commands.RamseteDrivePath;
 import frc.robot.commands.WaitForCount;
 import frc.robot.libraries.AutonomousCommands;
 import frc.robot.libraries.AutonomousSteps;
@@ -171,7 +172,7 @@ public class AutonomousSubsystem extends SubsystemBase {
   private boolean m_bIsCommandDone = false;
   private int m_stepIndex;
   private int m_iWaitCount;
-
+  private Trajectory m_drive3Trajectory;
   private WaitCommand m_wait1;
   private StepState m_stepWait1Sw1;
   private WaitCommand m_wait2;
@@ -182,7 +183,8 @@ public class AutonomousSubsystem extends SubsystemBase {
   private StepState m_stepWaitForCount;
   private PlaceCone m_placeConeM;
   private StepState m_stepPlaceConeM;
-  
+  private RamseteDrivePath m_drive3Path;
+  private StepState m_stepDrive3Path;
   
   //private String m_path1JSON = "paths/Path1.wpilib.json";
   //private Trajectory m_trajPath1;
@@ -206,7 +208,7 @@ public class AutonomousSubsystem extends SubsystemBase {
 
   
     m_ConsoleAuto = consoleAuto;
-
+    m_drive = driveNorm;
     m_selectedCommand = m_autoSelectCommand[0];
     m_strCommand = m_selectedCommand.toString();
     m_autoCommand = new AutonomousCommandSelector<AutonomousSteps>();
@@ -228,15 +230,18 @@ public class AutonomousSubsystem extends SubsystemBase {
 
     m_placeConeM = new PlaceCone();
     m_autoCommand.addOption(AutonomousSteps.PLACECONEM, m_placeConeM);
-    m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM);
+    m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM, m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kPLACE_GAMEPIECE_SW));
    
-    
+    genTrajectory();
+    m_drive3Path = new RamseteDrivePath(m_drive3Trajectory, kRESET_ODOMETRY, m_drive);
+    m_autoCommand.addOption(AutonomousSteps.DRIVE3, m_drive3Path);
+    m_stepDrive3Path = new StepState(AutonomousSteps.DRIVE3, m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kDRIVE_PATTERN_1_SW));
 
 
     // array group length must match the enum entries in AutonomousCommands
     // anything extra is ignored
     m_cmdSteps = new StepState [] [] {
-      {m_stepWaitForCount}
+      {m_stepWaitForCount, m_stepDrive3Path}
         };
     // the command lists are matched sequentially to the enum entries
 
@@ -244,6 +249,14 @@ public class AutonomousSubsystem extends SubsystemBase {
   }
 
   // generate an internal trajectory using specified begin, way points, and end
+  private void genTrajectory() {
+    m_drive3Trajectory = 
+      TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(1, 0)),
+        new Pose2d(2, 0, new Rotation2d(0)),
+        m_drive.getTrajConfig());
+  }
 
 
   // read externally generated trajectory (path) from an external file in the standard "deploy" path
