@@ -3,17 +3,27 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static final class PneumaticsConstants {
+    public static final int kPNEUMATIC_HUB_PORT = 1;
+  }
+
   public static final class DriveConstants {
     public static final int kLeftMotor1Port = 2;
     public static final int kLeftMotor2Port = 3;
@@ -24,15 +34,17 @@ public final class Constants {
     public static final double kRAMP_RATE = 1.0;
     public static final int kCURRENT_LIMT = 40;
     public static final double kMAX_VOLTAGE = 10;
-    
+
     public static final double kTIRE_SIZE_IN = 6.0;
     public static final double kTIRE_SIZE_M = Units.inchesToMeters(kTIRE_SIZE_IN);
     public static final int kPULSE_PER_ROTATION = 1;
 
     public static final double kGEAR_REDUCTION = (52.0 / 12.0) * (68.0 / 30.0);
-    //public static final double kHIGH_GEAR_REDUCTION = (42.0 / 12.0) * (50.0 / 24.0);
-    //public static final double kENCODER_DISTANCE_PER_PULSE_M_HIGH = ((double) kPULSE_PER_ROTATION / kHIGH_GEAR_REDUCTION);
-    public static final double kENCODER_DISTANCE_PER_PULSE_M = ((double) kPULSE_PER_ROTATION   / kGEAR_REDUCTION);
+    // public static final double kHIGH_GEAR_REDUCTION = (42.0 / 12.0) * (50.0 /
+    // 24.0);
+    // public static final double kENCODER_DISTANCE_PER_PULSE_M_HIGH = ((double)
+    // kPULSE_PER_ROTATION / kHIGH_GEAR_REDUCTION);
+    public static final double kENCODER_DISTANCE_PER_PULSE_M = ((double) kPULSE_PER_ROTATION / kGEAR_REDUCTION);
     // * (kTIRE_SIZE_M * Math.PI);
     public static final double kTRACK_WIDTH_M = 0.5;
 
@@ -48,8 +60,7 @@ public final class Constants {
     public static final double kMEDIUM_GEAR_SPEED = .75;
     public static final double kHIGH_GEAR_SPEED = 1;
 
-    public static final DifferentialDriveKinematics kDRIVE_KINEMATICS = 
-    new DifferentialDriveKinematics(kTRACK_WIDTH_M);
+    public static final DifferentialDriveKinematics kDRIVE_KINEMATICS = new DifferentialDriveKinematics(kTRACK_WIDTH_M);
     // shifter numatic ports
     public static final int kSHIFT_UP = 1;
     public static final int kSHIFT_DOWN = 0;
@@ -72,14 +83,15 @@ public final class Constants {
      * public static final double kKEEP_HEADING_TOLERANCE = 1;
      */
   }
+
   public static class ArmConstants {
     public static final int kShoulderPort = 12;
     public static final int kELBOW_PORT = 11;
 
-    //convert abs encoder angle to degrees just because
+    // convert abs encoder angle to degrees just because
     public static final double kELBOW_ANGLE_CONVERSION = 360;
     public static final double kBUMPER_SETPOINT = 108;
-    public static final double kELBOW_TOP_LIMIT= 252;
+    public static final double kELBOW_TOP_LIMIT = 252;
 
     public static final double kELBOW_CNTL_P = .15;
     public static final double kELBOW_CNTL_I = 0;
@@ -97,6 +109,16 @@ public final class Constants {
     public static final double kELBOW_ACCELERATION_PER_SECOND_SQ = 0.25;
 
   }
+
+  public static class HandConstants {
+    public static final int kLEFTMOTORPORT = 20;
+    public static final int kRIGHTMOTORPORT = 21;
+    public static final boolean kIS_INVERTED = true;
+    public static final int FWDPORT = 0;
+    public static final int REVPORT = 1;
+
+  }
+
   public static class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;
