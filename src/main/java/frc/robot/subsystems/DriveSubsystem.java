@@ -184,6 +184,7 @@ public class DriveSubsystem extends SubsystemBase {
   private void resetAngle() {
     m_navX.zeroYaw();
     // need to add reset of odometry and encoders
+    // that was done
   }
 
   private double getLeftDistance() {

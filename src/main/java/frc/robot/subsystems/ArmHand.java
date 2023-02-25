@@ -33,6 +33,12 @@ public class ArmHand extends SubsystemBase {
     LeftHandMotor.setInverted(!Constants.HandConstants.kIS_INVERTED);
     RightHandMotor.setInverted(Constants.HandConstants.kIS_INVERTED);
 
+    LeftHandMotor.setSmartCurrentLimit(Constants.HandConstants.kMAX_HAND_AMPS);
+    RightHandMotor.setSmartCurrentLimit(Constants.HandConstants.kMAX_HAND_AMPS);
+
+    LeftHandMotor.setOpenLoopRampRate(Constants.HandConstants.kHAND_RAMP_RATE);
+    RightHandMotor.setOpenLoopRampRate(Constants.HandConstants.kHAND_RAMP_RATE);
+    
     HandCloser = new DoubleSolenoid(Constants.PneumaticsConstants.kPNEUMATIC_HUB_PORT, PneumaticsModuleType.REVPH,
         Constants.HandConstants.FWDPORT, Constants.HandConstants.REVPORT);
   }

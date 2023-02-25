@@ -69,8 +69,9 @@ public class RobotContainer {
 
     m_ArmJointsSubsystem.setDefaultCommand(
         Commands.run(
-            () -> m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY()),
+            () -> m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY(), m_operatorController.getRightY()),
             m_ArmJointsSubsystem));
+    // in the merge keep this version so elbow and shoulder is controlled seperatly
     m_ArmHand.setDefaultCommand(
         Commands.run(
             () -> m_ArmHand.SetHandMotors(m_operatorController.getRightTrigger()), m_ArmHand));
@@ -113,9 +114,9 @@ public class RobotContainer {
     m_operatorController
         .RB()
         .onTrue(Commands.runOnce(() -> m_ArmHand.CloseHand(), m_ArmHand));
-        m_operatorController
-        .RB()
-        .onTrue(Commands.runOnce(()->m_ArmHand.StopHandMotors(),m_ArmHand));
+    m_operatorController
+        .X()
+        .onTrue(Commands.runOnce(() -> m_ArmHand.StopHandMotors(), m_ArmHand));
 
   }
 
