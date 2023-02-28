@@ -47,6 +47,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_ShoulderMotor = new WPI_TalonSRX(Constants.ArmConstants.kShoulderPort);
     m_ShoulderMotor.setInverted(true);
     m_elbowMotor = new CANSparkMax(Constants.ArmConstants.kELBOW_PORT, MotorType.kBrushless);
+    m_elbowMotor.setInverted(true);
 
     m_ShoulderMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
         LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
@@ -133,7 +134,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     }
 
     if (canElbowMove(isElbowMoveFwd)) {
-      m_elbowMotor.set(speed);
+      m_elbowMotor.set(speed * 0.6);
     } else {
       m_elbowMotor.stopMotor();
     }
