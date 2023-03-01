@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Add your docs here. */
-public class CommandGamepadX extends CommandGenericHID{
+public class CommandGamepadX extends CommandGenericHID {
 
     private final GamepadX m_hid;
 
@@ -19,7 +19,7 @@ public class CommandGamepadX extends CommandGenericHID{
         m_hid = new GamepadX(port);
     }
 
-    //@Override
+    // @Override
     public GamepadX getHID() {
         return m_hid;
     }
@@ -27,6 +27,7 @@ public class CommandGamepadX extends CommandGenericHID{
     public double getLeftX() {
         return m_hid.getLeftX();
     }
+
     public double getLeftY() {
         return m_hid.getLeftY();
     }
@@ -34,9 +35,17 @@ public class CommandGamepadX extends CommandGenericHID{
     public double getRightX() {
         return m_hid.getRightX();
     }
-    
+
     public double getRightY() {
         return m_hid.getRightY();
+    }
+
+    public double getLeftTigger() {
+        return m_hid.getLeftTrigger();
+    }
+
+    public double getRightTrigger() {
+        return m_hid.getRightTrigger();
     }
 
     public Trigger LB() {
@@ -62,6 +71,7 @@ public class CommandGamepadX extends CommandGenericHID{
     public Trigger X(EventLoop loop) {
         return m_hid.X(loop).castTo(Trigger::new);
     }
+
     public Trigger A() {
         return A(CommandScheduler.getInstance().getDefaultButtonLoop());
     }
@@ -77,6 +87,7 @@ public class CommandGamepadX extends CommandGenericHID{
     public Trigger B(EventLoop loop) {
         return m_hid.B(loop).castTo(Trigger::new);
     }
+
     public Trigger Y() {
         return Y(CommandScheduler.getInstance().getDefaultButtonLoop());
     }
@@ -84,6 +95,7 @@ public class CommandGamepadX extends CommandGenericHID{
     public Trigger Y(EventLoop loop) {
         return m_hid.Y(loop).castTo(Trigger::new);
     }
+
     public Trigger Back() {
         return Back(CommandScheduler.getInstance().getDefaultButtonLoop());
     }
@@ -99,6 +111,7 @@ public class CommandGamepadX extends CommandGenericHID{
     public Trigger Start(EventLoop loop) {
         return m_hid.Start(loop).castTo(Trigger::new);
     }
+
     public Trigger LJB() {
         return LJB(CommandScheduler.getInstance().getDefaultButtonLoop());
     }
@@ -106,6 +119,7 @@ public class CommandGamepadX extends CommandGenericHID{
     public Trigger LJB(EventLoop loop) {
         return m_hid.LJB(loop).castTo(Trigger::new);
     }
+
     public Trigger RJB() {
         return RJB(CommandScheduler.getInstance().getDefaultButtonLoop());
     }

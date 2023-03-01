@@ -45,10 +45,18 @@ public class ArmJointsSubsystem extends SubsystemBase {
     // retracts on dflt reverse
     // motor is mounted forward of arms - motion is inverted
     m_ShoulderMotor = new WPI_TalonSRX(Constants.ArmConstants.kShoulderPort);
-    m_ShoulderMotor.setInverted(true);
+    m_ShoulderMotor.setInverted(Constants.ArmConstants.kIS_SHOULDER_INVERTED);
+
     m_elbowMotor = new CANSparkMax(Constants.ArmConstants.kELBOW_PORT, MotorType.kBrushless);
+    
+    m_elbowMotor.setSmartCurrentLimit(Constants.ArmConstants.kMAX_ELBOW_AMPS);
+    m_ShoulderMotor.configPeakCurrentLimit(Constants.ArmConstants.kMAX_SHOULDER_AMP_LIMIT);
+    
     m_elbowMotor.setInverted(true);
 
+    m_elbowMotor.setOpenLoopRampRate(Constants.ArmConstants.kARM_RAMP_RATE);
+    m_ShoulderMotor.configClosedloopRamp(Constants.ArmConstants.kARM_RAMP_RATE);
+    
     m_ShoulderMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
         LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
     m_ShoulderMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
@@ -59,7 +67,8 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_elbowFwdLimit.enableLimitSwitch(true);
     m_elbowRevLimit.enableLimitSwitch(true);
 
-    //m_elbowAngle = new DutyCycleEncoder(Constants.ArmConstants.kELBOW_ANGLE_PORT);
+    // m_elbowAngle = new
+    // DutyCycleEncoder(Constants.ArmConstants.kELBOW_ANGLE_PORT);
     m_elbowAngle = m_elbowMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     m_elbowAngle.setPositionConversionFactor(ArmConstants.kELBOW_ANGLE_CONVERSION);
     m_elbowPIDCntl = m_elbowMotor.getPIDController();
@@ -70,8 +79,8 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_elbowPIDCntl.setIZone(ArmConstants.kELBOW_CNTL_IZONE);
     m_elbowPIDCntl.setOutputRange(ArmConstants.kELBOW_CNTL_MIN_OUT, ArmConstants.kELBOW_CNTL_MAX_OUT);
     m_elbowFeedforward = new SimpleMotorFeedforward(ArmConstants.kELBOW_FF_S_VOLTS,
-      ArmConstants.kELBOW_FF_V_VOLT_SECOND_PER_UNIT,
-      ArmConstants.kELBOW_FF_A_VOLT_SECOND_SQ_PER_UNIT);
+        ArmConstants.kELBOW_FF_V_VOLT_SECOND_PER_UNIT,
+        ArmConstants.kELBOW_FF_A_VOLT_SECOND_SQ_PER_UNIT);
 
   }
 
@@ -81,9 +90,9 @@ public class ArmJointsSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void moveArm(double speed) {
-    moveShoulder(speed);
-    moveElbow(speed);
+  public void moveArm(double shoulderSpeed, double elbowSpeed) {
+    moveShoulder(shoulderSpeed);
+    moveElbow(elbowSpeed);
   }
 
   public void stopArm() {
@@ -122,14 +131,15 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_isArmExtended = m_ShoulderMotor.isFwdLimitSwitchClosed() == 1;
     return m_isArmExtended;
   }
-/*
- *speed <0 is back  
- *elbow angle is an asanding num 
- */
+
+  /*
+   * speed <0 is back
+   * elbow angle is an asanding num
+   */
   public void moveElbow(double speed) {
 
     boolean isElbowMoveFwd = true;
-    if (speed > 0) {
+     if (speed > 0) {
       isElbowMoveFwd = false;
     }
 
@@ -138,28 +148,28 @@ public class ArmJointsSubsystem extends SubsystemBase {
     } else {
       m_elbowMotor.stopMotor();
     }
-
+    
     /*
-    if (speed < 0) {
-      //arm is moving back
-      if (isShoulderParked()) {
-        m_elbowMotor.set(speed);
-      } else {
-        if (m_elbowAngle.getPosition() > Constants.ArmConstants.kBUMPER_SETPOINT) {
-          m_elbowMotor.set(speed);
-        } else {   
-          m_elbowMotor.stopMotor();
-        }
-      }
-    } else {
-      //arm is moving out
-      if (m_elbowAngle.getPosition() < Constants.ArmConstants.kELBOW_TOP_LIMIT) {
-        m_elbowMotor.set(speed);
-      } else {
-        m_elbowMotor.stopMotor();
-      }
-    }
-    */
+     * if (speed < 0) {
+     * //arm is moving back
+     * if (isShoulderParked()) {
+     * m_elbowMotor.set(speed);
+     * } else {
+     * if (m_elbowAngle.getPosition() > Constants.ArmConstants.kBUMPER_SETPOINT) {
+     * m_elbowMotor.set(speed);
+     * } else {
+     * m_elbowMotor.stopMotor();
+     * }
+     * }
+     * } else {
+     * //arm is moving out
+     * if (m_elbowAngle.getPosition() < Constants.ArmConstants.kELBOW_TOP_LIMIT) {
+     * m_elbowMotor.set(speed);
+     * } else {
+     * m_elbowMotor.stopMotor();
+     * }
+     * }
+     */
 
   }
 
@@ -168,22 +178,22 @@ public class ArmJointsSubsystem extends SubsystemBase {
     boolean isElbowMoveFwd = true;
     if (canElbowMove(isElbowMoveFwd)) {
       m_elbowPIDCntl.setReference(elbowState.position,
-        ControlType.kPosition,
-        0,
-        m_elbowFeedforward.calculate(elbowState.velocity));
+          ControlType.kPosition,
+          0,
+          m_elbowFeedforward.calculate(elbowState.velocity));
     }
   }
 
   public boolean canElbowMove(boolean isElbowMoveFwd) {
     boolean isElbowMovable = true;
-    
+
     if (isElbowMoveFwd) {
-      //arm is moving out
+      // arm is moving out
       if (m_elbowAngle.getPosition() >= Constants.ArmConstants.kELBOW_TOP_LIMIT) {
         isElbowMovable = false;
       }
     } else {
-      //arm is moving back
+      // arm is moving back
       if (!isShoulderParked()) {
         if (m_elbowAngle.getPosition() <= Constants.ArmConstants.kBUMPER_SETPOINT) {
           isElbowMovable = false;

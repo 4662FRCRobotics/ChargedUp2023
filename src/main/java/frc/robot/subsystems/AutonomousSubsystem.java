@@ -34,6 +34,8 @@ public class AutonomousSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
 
   private DriveSubsystem m_drive;
+  private ArmJointsSubsystem m_armJoint;
+  private ArmHandSubsystem m_armHand;
 
   AutonomousCommandSelector<AutonomousSteps> m_autoCommand;
   private String kAUTO_TAB = "Autonomous";
@@ -204,11 +206,16 @@ public class AutonomousSubsystem extends SubsystemBase {
   */
 
   public AutonomousSubsystem(ConsoleAuto consoleAuto,
-                    DriveSubsystem driveNorm) {
+                    DriveSubsystem drive,
+                    ArmJointsSubsystem armJoint,
+                    ArmHandSubsystem armHand) {
 
   
     m_ConsoleAuto = consoleAuto;
-    m_drive = driveNorm;
+    m_drive = drive;
+    m_armJoint = armJoint;
+    m_armHand = armHand;
+    
     m_selectedCommand = m_autoSelectCommand[0];
     m_strCommand = m_selectedCommand.toString();
     m_autoCommand = new AutonomousCommandSelector<AutonomousSteps>();
