@@ -21,7 +21,7 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class PneumaticsConstants {
-    public static final int kPNEUMATIC_HUB_PORT = 1;
+    public static final int kPNEUMATIC_HUB_PORT = 20;
   }
 
   public static final class DriveConstants {
@@ -116,13 +116,14 @@ public final class Constants {
   }
 
   public static class HandConstants {
-    public static final int kLEFTMOTORPORT = 20;
-    public static final int kRIGHTMOTORPORT = 21;
+    public static final int kLEFTMOTORPORT = 21;
+    public static final int kRIGHTMOTORPORT = 22;
     public static final boolean kIS_INVERTED = true;
-    public static final int FWDPORT = 0;
-    public static final int REVPORT = 1;
+    public static final int kFWDPORT = 0;
+    public static final int kREVPORT = 1;
     public static final int kMAX_HAND_AMPS = 20;
-    public static final double kHAND_RAMP_RATE = .75;
+    public static final double kHAND_RAMP_RATE = 0.75;
+    public static final double kSPEED_FACTOR = 0.70;
 
   }
 

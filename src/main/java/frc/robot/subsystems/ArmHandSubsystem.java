@@ -12,17 +12,18 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.HandConstants;
+import frc.robot.Constants.PneumaticsConstants;;
 
-public class ArmHand extends SubsystemBase {
+public class ArmHandSubsystem extends SubsystemBase {
   /** Creates a new ArmHand. */
   private CANSparkMax LeftHandMotor;
   private CANSparkMax RightHandMotor;
   private DoubleSolenoid HandCloser;
 
-  public ArmHand() {
-    LeftHandMotor = new CANSparkMax(Constants.HandConstants.kLEFTMOTORPORT, MotorType.kBrushless);
-    RightHandMotor = new CANSparkMax(Constants.HandConstants.kRIGHTMOTORPORT, MotorType.kBrushless);
+  public ArmHandSubsystem() {
+    LeftHandMotor = new CANSparkMax(HandConstants.kLEFTMOTORPORT, MotorType.kBrushless);
+    RightHandMotor = new CANSparkMax(HandConstants.kRIGHTMOTORPORT, MotorType.kBrushless);
 
     LeftHandMotor.restoreFactoryDefaults();
     RightHandMotor.restoreFactoryDefaults();
@@ -30,17 +31,17 @@ public class ArmHand extends SubsystemBase {
     LeftHandMotor.setIdleMode(IdleMode.kBrake);
     RightHandMotor.setIdleMode(IdleMode.kBrake);
 
-    LeftHandMotor.setInverted(!Constants.HandConstants.kIS_INVERTED);
-    RightHandMotor.setInverted(Constants.HandConstants.kIS_INVERTED);
+    LeftHandMotor.setInverted(!HandConstants.kIS_INVERTED);
+    RightHandMotor.setInverted(HandConstants.kIS_INVERTED);
 
-    LeftHandMotor.setSmartCurrentLimit(Constants.HandConstants.kMAX_HAND_AMPS);
-    RightHandMotor.setSmartCurrentLimit(Constants.HandConstants.kMAX_HAND_AMPS);
+    LeftHandMotor.setSmartCurrentLimit(HandConstants.kMAX_HAND_AMPS);
+    RightHandMotor.setSmartCurrentLimit(HandConstants.kMAX_HAND_AMPS);
 
-    LeftHandMotor.setOpenLoopRampRate(Constants.HandConstants.kHAND_RAMP_RATE);
-    RightHandMotor.setOpenLoopRampRate(Constants.HandConstants.kHAND_RAMP_RATE);
+    LeftHandMotor.setOpenLoopRampRate(HandConstants.kHAND_RAMP_RATE);
+    RightHandMotor.setOpenLoopRampRate(HandConstants.kHAND_RAMP_RATE);
     
-    HandCloser = new DoubleSolenoid(Constants.PneumaticsConstants.kPNEUMATIC_HUB_PORT, PneumaticsModuleType.REVPH,
-        Constants.HandConstants.FWDPORT, Constants.HandConstants.REVPORT);
+    HandCloser = new DoubleSolenoid(PneumaticsConstants.kPNEUMATIC_HUB_PORT, PneumaticsModuleType.REVPH,
+        HandConstants.kFWDPORT, HandConstants.kREVPORT);
   }
 
   public void CloseHand() {
@@ -51,9 +52,10 @@ public class ArmHand extends SubsystemBase {
     HandCloser.set(Value.kReverse);
   }
 
-  public void SetHandMotors(Double Speed) {
-    LeftHandMotor.set(Speed);
-    RightHandMotor.set(Speed);
+  public void SetHandMotors(Double inSpeed, double outSpeed) {
+    double speed = outSpeed - inSpeed;
+    LeftHandMotor.set(speed * HandConstants.kSPEED_FACTOR);
+    RightHandMotor.set(speed * HandConstants.kSPEED_FACTOR);
   }
 
   public void StopHandMotors() {
