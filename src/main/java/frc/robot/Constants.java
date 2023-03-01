@@ -96,6 +96,7 @@ public final class Constants {
     public static final double kELBOW_MAX_SPEED_PER_SECOND = 0.5;
     public static final double kELBOW_ACCELERATION_PER_SECOND_SQ = 0.25;
 
+    public static final double kELBOW_SPEED = 0.6;
   }
   public static class OperatorConstants {
 

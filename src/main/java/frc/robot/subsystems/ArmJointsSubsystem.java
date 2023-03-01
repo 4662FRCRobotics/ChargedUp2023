@@ -134,7 +134,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     }
 
     if (canElbowMove(isElbowMoveFwd)) {
-      m_elbowMotor.set(speed * 0.6);
+      m_elbowMotor.set(speed * Constants.ArmConstants.kELBOW_SPEED);
     } else {
       m_elbowMotor.stopMotor();
     }
