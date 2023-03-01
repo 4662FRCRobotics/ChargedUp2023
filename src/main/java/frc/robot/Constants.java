@@ -113,6 +113,7 @@ public final class Constants {
     public static final double kELBOW_ACCELERATION_PER_SECOND_SQ = 0.25;
     public static final boolean kIS_SHOULDER_INVERTED = true;
 
+    public static final double kELBOW_SPEED = 0.6;
   }
 
   public static class HandConstants {

@@ -51,6 +51,8 @@ public class ArmJointsSubsystem extends SubsystemBase {
     
     m_elbowMotor.setSmartCurrentLimit(Constants.ArmConstants.kMAX_ELBOW_AMPS);
     m_ShoulderMotor.configPeakCurrentLimit(Constants.ArmConstants.kMAX_SHOULDER_AMP_LIMIT);
+    
+    m_elbowMotor.setInverted(true);
 
     m_elbowMotor.setOpenLoopRampRate(Constants.ArmConstants.kARM_RAMP_RATE);
     m_ShoulderMotor.configClosedloopRamp(Constants.ArmConstants.kARM_RAMP_RATE);
@@ -142,7 +144,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     }
 
     if (canElbowMove(isElbowMoveFwd)) {
-      m_elbowMotor.set(speed);
+      m_elbowMotor.set(speed * Constants.ArmConstants.kELBOW_SPEED);
     } else {
       m_elbowMotor.stopMotor();
     }
