@@ -44,28 +44,28 @@ public class ArmJointsSubsystem extends SubsystemBase {
     // extends on dflt forward
     // retracts on dflt reverse
     // motor is mounted forward of arms - motion is inverted
-    m_ShoulderMotor = new WPI_TalonSRX(Constants.ArmConstants.kShoulderPort);
-    m_ShoulderMotor.setInverted(Constants.ArmConstants.kIS_SHOULDER_INVERTED);
+    //m_ShoulderMotor = new WPI_TalonSRX(Constants.ArmConstants.kShoulderPort);
+    //m_ShoulderMotor.setInverted(Constants.ArmConstants.kIS_SHOULDER_INVERTED);
 
     m_elbowMotor = new CANSparkMax(Constants.ArmConstants.kELBOW_PORT, MotorType.kBrushless);
     
     m_elbowMotor.setSmartCurrentLimit(Constants.ArmConstants.kMAX_ELBOW_AMPS);
-    m_ShoulderMotor.configPeakCurrentLimit(Constants.ArmConstants.kMAX_SHOULDER_AMP_LIMIT);
+    //m_ShoulderMotor.configPeakCurrentLimit(Constants.ArmConstants.kMAX_SHOULDER_AMP_LIMIT);
     
     m_elbowMotor.setInverted(true);
 
     m_elbowMotor.setOpenLoopRampRate(Constants.ArmConstants.kARM_RAMP_RATE);
-    m_ShoulderMotor.configClosedloopRamp(Constants.ArmConstants.kARM_RAMP_RATE);
+    //m_ShoulderMotor.configClosedloopRamp(Constants.ArmConstants.kARM_RAMP_RATE);
     
-    m_ShoulderMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-        LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
-    m_ShoulderMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-        LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
+    //m_ShoulderMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+    //    LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
+    //m_ShoulderMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+    //    LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
 
-    m_elbowRevLimit = m_elbowMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    m_elbowFwdLimit = m_elbowMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    m_elbowFwdLimit.enableLimitSwitch(true);
-    m_elbowRevLimit.enableLimitSwitch(true);
+    //m_elbowRevLimit = m_elbowMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    //m_elbowFwdLimit = m_elbowMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    //m_elbowFwdLimit.enableLimitSwitch(true);
+    //m_elbowRevLimit.enableLimitSwitch(true);
 
     // m_elbowAngle = new
     // DutyCycleEncoder(Constants.ArmConstants.kELBOW_ANGLE_PORT);
@@ -91,15 +91,16 @@ public class ArmJointsSubsystem extends SubsystemBase {
   }
 
   public void moveArm(double shoulderSpeed, double elbowSpeed) {
-    moveShoulder(shoulderSpeed);
+    //moveShoulder(shoulderSpeed);
     moveElbow(elbowSpeed);
   }
 
   public void stopArm() {
-    stopShoulderMove();
+    //stopShoulderMove();
     stopElbowMove();
   }
 
+  /* 
   public void moveShoulder(double speed) {
     // direct test of elbow sensor or depend on command? may be non-standard to
     // direct test
@@ -131,6 +132,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_isArmExtended = m_ShoulderMotor.isFwdLimitSwitchClosed() == 1;
     return m_isArmExtended;
   }
+  */
 
   /*
    * speed <0 is back
@@ -193,11 +195,16 @@ public class ArmJointsSubsystem extends SubsystemBase {
         isElbowMovable = false;
       }
     } else {
+      /*
       // arm is moving back
       if (!isShoulderParked()) {
         if (m_elbowAngle.getPosition() <= Constants.ArmConstants.kBUMPER_SETPOINT) {
           isElbowMovable = false;
         }
+      }
+      */
+      if (m_elbowAngle.getPosition() <= Constants.ArmConstants.kELBOW_PARK_LIMIT) {
+        isElbowMovable = false;
       }
     }
 
