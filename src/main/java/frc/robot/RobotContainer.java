@@ -52,7 +52,7 @@ public class RobotContainer {
   private final AutonomousSubsystem m_autonomous = new AutonomousSubsystem(m_consoleAuto,
     m_robotDrive,
     m_ArmJointsSubsystem,
-    m_ArmHand
+   m_ArmHand
   );
 
   private final AutoSelect m_autoSelect = new AutoSelect(m_autonomous);
@@ -68,8 +68,9 @@ public class RobotContainer {
 
     m_robotDrive.setDefaultCommand(
         Commands.run(
-            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()),
+            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()*.65),
             m_robotDrive));
+            //change to a constant when possible
 
     m_ArmJointsSubsystem.setDefaultCommand(
         Commands.run(
@@ -115,10 +116,10 @@ public class RobotContainer {
         .Start()
         .onTrue(Commands.runOnce(() -> m_ArmJointsSubsystem.stopArm(), m_ArmJointsSubsystem));
     m_operatorController
-        .LB()
+        .RB()
         .onTrue(Commands.runOnce(() -> m_ArmHand.OpenHand(), m_ArmHand));
     m_operatorController
-        .RB()
+        .LB()
         .onTrue(Commands.runOnce(() -> m_ArmHand.CloseHand(), m_ArmHand));
     /*m_operatorController
         .X()
