@@ -89,15 +89,15 @@ public final class Constants {
     public static final int kSHOULDER_PORT = 12;
     public static final int kELBOW_PORT = 11;
     
-    public static final double kARM_RAMP_RATE = 1.0;
+    public static final double kARM_RAMP_RATE = .75;
     // convert abs encoder angle to degrees just because
     public static final double kELBOW_ANGLE_CONVERSION = 360;
-    public static final double kELBOW_PARK_LIMIT = 45;
+    public static final double kELBOW_PARK_LIMIT = 32;
     public static final double kBUMPER_SETPOINT = 108;
-    public static final double kELBOW_TOP_LIMIT = 252;
+    public static final double kELBOW_TOP_LIMIT = 999;
 
     public static final int kMAX_SHOULDER_AMP_LIMIT = 40;
-    public static final int kMAX_ELBOW_AMPS = 20;
+    public static final int kMAX_ELBOW_AMPS = 25;
 
     public static final double kELBOW_CNTL_P = .15;
     public static final double kELBOW_CNTL_I = 0;
@@ -115,15 +115,15 @@ public final class Constants {
     public static final double kELBOW_ACCELERATION_PER_SECOND_SQ = 0.25;
     public static final boolean kIS_SHOULDER_INVERTED = true;
 
-    public static final double kELBOW_SPEED = 0.6;
+    public static final double kELBOW_SPEED = 0.65;
   }
 
   public static class HandConstants {
     public static final int kLEFTMOTORPORT = 21;
     public static final int kRIGHTMOTORPORT = 22;
     public static final boolean kIS_INVERTED = true;
-    public static final int kFWDPORT = 0;
-    public static final int kREVPORT = 1;
+    public static final int kFWDPORT = 6;
+    public static final int kREVPORT = 7;
     public static final int kMAX_HAND_AMPS = 20;
     public static final double kHAND_RAMP_RATE = 0.75;
     public static final double kSPEED_FACTOR = 0.70;
