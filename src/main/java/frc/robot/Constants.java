@@ -25,6 +25,8 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
+    
+    public static final double kTURN_SPEED = .65;
     public static final int kLeftMotor1Port = 2;
     public static final int kLeftMotor2Port = 3;
     public static final int kRightMotor1Port = 4;
@@ -90,14 +92,14 @@ public final class Constants {
     public static final int kELBOW_PORT = 11;
     
     public static final double kARM_RAMP_RATE = .75;
-    // convert abs encoder angle to degrees just because
+    // convert abs encoder angle to degrees just because it is easyer to work with
     public static final double kELBOW_ANGLE_CONVERSION = 360;
     public static final double kELBOW_PARK_LIMIT = 32;
     public static final double kBUMPER_SETPOINT = 108;
     public static final double kELBOW_TOP_LIMIT = 999;
 
     public static final int kMAX_SHOULDER_AMP_LIMIT = 40;
-    public static final int kMAX_ELBOW_AMPS = 25;
+    public static final int kMAX_ELBOW_AMPS = 20;
 
     public static final double kELBOW_CNTL_P = .15;
     public static final double kELBOW_CNTL_I = 0;

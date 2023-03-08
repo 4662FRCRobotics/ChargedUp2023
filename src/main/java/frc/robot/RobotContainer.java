@@ -68,9 +68,8 @@ public class RobotContainer {
 
     m_robotDrive.setDefaultCommand(
         Commands.run(
-            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()*.65),
+            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()*Constants.DriveConstants.kTURN_SPEED),
             m_robotDrive));
-            //change to a constant when possible
 
     m_ArmJointsSubsystem.setDefaultCommand(
         Commands.run(
