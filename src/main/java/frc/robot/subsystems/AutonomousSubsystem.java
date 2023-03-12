@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ConsoleConstants;
@@ -183,7 +184,7 @@ public class AutonomousSubsystem extends SubsystemBase {
   private StepState m_stepWait2SwAB;
   private WaitForCount m_waitForCount;
   private StepState m_stepWaitForCount;
-  private PlaceCone m_placeConeM;
+  private Command m_placeConeM;
   private StepState m_stepPlaceConeM;
   private RamseteDrivePath m_drive3Path;
   private StepState m_stepDrive3Path;
@@ -222,11 +223,11 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_iPatternSelect = -1;
 
     // build commands and step controls
-    m_wait1 = new WaitCommand(1);
+    m_wait1 = new WaitCommand(1.0);
     m_autoCommand.addOption(AutonomousSteps.WAIT1, m_wait1);
     m_stepWait1Sw1 = new StepState(AutonomousSteps.WAIT1, m_ConsoleAuto.getSwitchSupplier(1));
     
-    m_wait2 = new WaitCommand(2);
+    m_wait2 = new WaitCommand(2.0);
     m_autoCommand.addOption(AutonomousSteps.WAIT2, m_wait2);
     m_stepWait2Sw1 = new StepState(AutonomousSteps.WAIT2, m_ConsoleAuto.getSwitchSupplier(1));
     m_stepWait2Sw2 = new StepState(AutonomousSteps.WAIT2, m_ConsoleAuto.getSwitchSupplier(2));
@@ -235,7 +236,9 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
     m_stepWaitForCount = new StepState(AutonomousSteps.WAITLOOP);
 
-    m_placeConeM = new PlaceCone();
+    m_placeConeM = new ParallelRaceGroup(
+        new WaitCommand(2.0),              
+        new PlaceCone(m_armHand));
     m_autoCommand.addOption(AutonomousSteps.PLACECONEM, m_placeConeM);
     m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM, m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kPLACE_GAMEPIECE_SW));
    
@@ -248,22 +251,24 @@ public class AutonomousSubsystem extends SubsystemBase {
     // array group length must match the enum entries in AutonomousCommands
     // anything extra is ignored
     m_cmdSteps = new StepState [] [] {
-      {m_stepWaitForCount, m_stepDrive3Path}
-        };
+      {m_stepWaitForCount, m_stepPlaceConeM, m_stepDrive3Path}
+    };
     // the command lists are matched sequentially to the enum entries
 
 
   }
 
   // generate an internal trajectory using specified begin, way points, and end
+
   private void genTrajectory() {
     m_drive3Trajectory = 
       TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(1, 0)),
+        List.of(new Translation2d(1.5, 0)),
         new Pose2d(2.5, 0, new Rotation2d(0)),
         m_drive.getTrajConfig());
   }
+  // change posistions to constants at home
 
 
   // read externally generated trajectory (path) from an external file in the standard "deploy" path

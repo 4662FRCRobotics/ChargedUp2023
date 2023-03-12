@@ -140,7 +140,7 @@ public final class Constants {
   }
 
   public static class ConsoleConstants {
-    public static final int kPLACE_GAMEPIECE_SW = 1;
+    public static final int kPLACE_GAMEPIECE_SW = 3;
     public static final int kDRIVE_PATTERN_1_SW = 2;
   }
 }
