@@ -236,9 +236,11 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
     m_stepWaitForCount = new StepState(AutonomousSteps.WAITLOOP);
 
-    m_placeConeM = new ParallelRaceGroup(
+   /*  m_placeConeM = new ParallelRaceGroup(
         new WaitCommand(2.0),              
-        new PlaceCone(m_armHand));
+        new PlaceCone(m_armHand));*/
+        m_placeConeM = new PlaceCone(m_armHand).withTimeout(2);
+
     m_autoCommand.addOption(AutonomousSteps.PLACECONEM, m_placeConeM);
     m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM, m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kPLACE_GAMEPIECE_SW));
    
