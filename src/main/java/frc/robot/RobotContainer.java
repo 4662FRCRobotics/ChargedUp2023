@@ -56,7 +56,7 @@ public class RobotContainer {
   );
 
   private final AutoSelect m_autoSelect = new AutoSelect(m_autonomous);
-  private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive, m_ArmHand);
+  private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive, m_ArmHand, m_ArmJointsSubsystem);
 
   private final CommandGamepadX m_driverController = new CommandGamepadX(OperatorConstants.kDriverControllerPort);
   private final CommandGamepadX m_operatorController = new CommandGamepadX(OperatorConstants.kOPERATOR_CONTROLLER_PORT);
