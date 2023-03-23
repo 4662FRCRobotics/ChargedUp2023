@@ -259,7 +259,8 @@ public class AutonomousSubsystem extends SubsystemBase {
     // array group length must match the enum entries in AutonomousCommands
     // anything extra is ignored
     m_cmdSteps = new StepState[][] {
-        { m_stepWaitForCount, m_stepMoveArm, m_stepPlaceConeM, m_stepDrive3Path }
+        { m_stepWaitForCount, m_stepPlaceConeM, m_stepDrive3Path }
+        //{ m_stepWaitForCount, m_stepMoveArm, m_stepPlaceConeM, m_stepDrive3Path }
     };
     // the command lists are matched sequentially to the enum entries
 
