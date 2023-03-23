@@ -63,6 +63,11 @@ public class ArmHandSubsystem extends SubsystemBase {
     RightHandMotor.stopMotor();
   }
 
+  public void StartHandMotors(double speed){
+    LeftHandMotor.set(speed);
+    RightHandMotor.set(speed);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

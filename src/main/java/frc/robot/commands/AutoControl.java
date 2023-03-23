@@ -2,21 +2,25 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ArmHandSubsystem;
+import frc.robot.subsystems.ArmJointsSubsystem;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class AutoControl extends CommandBase {
-    
+
     private Command m_currentCommand;
     private AutonomousSubsystem m_autonomous;
     private DriveSubsystem m_drive;
+    private ArmHandSubsystem m_hand;
+    private ArmJointsSubsystem m_ArmJointsSubsystem;
 
-    public AutoControl(AutonomousSubsystem autonomous, DriveSubsystem drive) 
-    {
+    public AutoControl(AutonomousSubsystem autonomous, DriveSubsystem drive, ArmHandSubsystem hand, ArmJointsSubsystem armjoints) {
         m_autonomous = autonomous;
         m_drive = drive;
-
-       addRequirements(m_autonomous, m_drive);  
+        m_hand = hand;
+        m_ArmJointsSubsystem = armjoints;
+        addRequirements(m_autonomous, m_drive, m_hand, armjoints);
     }
 
     @Override
@@ -30,7 +34,7 @@ public class AutoControl extends CommandBase {
     @Override
     public void execute() {
         m_currentCommand.execute();
-       //  System.out.println("execute");
+        // System.out.println("execute");
     }
 
     @Override

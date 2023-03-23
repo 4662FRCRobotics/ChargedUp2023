@@ -15,6 +15,7 @@ public enum AutonomousSteps {
     WAITLOOP,
     FINDSUMPIN,
     END,
-    PLACECONEM;
+    PLACECONEM,
+    MOVEARM;
 
 }

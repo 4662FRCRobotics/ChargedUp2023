@@ -96,8 +96,9 @@ public final class Constants {
     public static final double kELBOW_ANGLE_CONVERSION = 360;
     public static final double kELBOW_PARK_LIMIT = 32;
     public static final double kBUMPER_SETPOINT = 108;
-    public static final double kELBOW_TOP_LIMIT = 110;
+    public static final double kELBOW_TOP_LIMIT = 90;
 
+    public static final double kHIGH_GOAL_POS = 40;
     public static final int kMAX_SHOULDER_AMP_LIMIT = 20;
     public static final int kMAX_ELBOW_AMPS = 40;
 
@@ -140,7 +141,7 @@ public final class Constants {
   }
 
   public static class ConsoleConstants {
-    public static final int kPLACE_GAMEPIECE_SW = 1;
+    public static final int kPLACE_GAMEPIECE_SW = 3;
     public static final int kDRIVE_PATTERN_1_SW = 2;
   }
 }

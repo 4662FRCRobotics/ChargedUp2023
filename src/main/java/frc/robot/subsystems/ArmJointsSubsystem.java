@@ -62,10 +62,8 @@ public class ArmJointsSubsystem extends SubsystemBase {
     // m_ShoulderMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
     // LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
 
-    // m_elbowRevLimit =
-    // m_elbowMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    // m_elbowFwdLimit =
-    // m_elbowMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    // m_elbowRevLimit = m_elbowMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    // m_elbowFwdLimit = m_elbowMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     // m_elbowFwdLimit.enableLimitSwitch(true);
     // m_elbowRevLimit.enableLimitSwitch(true);
 
@@ -209,7 +207,9 @@ public class ArmJointsSubsystem extends SubsystemBase {
         isElbowMovable = false;
       }
     }
-
+    if (!isElbowMovable) {
+      stopElbowMove();
+    }
     return isElbowMovable;
   }
 
