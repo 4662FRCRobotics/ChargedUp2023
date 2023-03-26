@@ -77,6 +77,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_elbowPIDCntl.setI(ArmConstants.kELBOW_CNTL_I);
     m_elbowPIDCntl.setD(ArmConstants.kELBOW_CNTL_D);
     m_elbowPIDCntl.setIZone(ArmConstants.kELBOW_CNTL_IZONE);
+    m_elbowPIDCntl.setPositionPIDWrappingEnabled(false); // do not wrap the elbow around
     m_elbowPIDCntl.setOutputRange(ArmConstants.kELBOW_CNTL_MIN_OUT, ArmConstants.kELBOW_CNTL_MAX_OUT);
     m_elbowFeedforward = new SimpleMotorFeedforward(ArmConstants.kELBOW_FF_S_VOLTS,
         ArmConstants.kELBOW_FF_V_VOLT_SECOND_PER_UNIT,
@@ -141,12 +142,14 @@ public class ArmJointsSubsystem extends SubsystemBase {
   public void moveElbow(double speed) {
 
     boolean isElbowMoveFwd = true;
+    double elbowSpeed = ArmConstants.kELBOW_SPEED_UP;
     if (speed > 0) {
       isElbowMoveFwd = false;
+      elbowSpeed = ArmConstants.kELBOW_SPEED_DOWN;
     }
 
     if (canElbowMove(isElbowMoveFwd)) {
-      m_elbowMotor.set(speed * Constants.ArmConstants.kELBOW_SPEED);
+      m_elbowMotor.set(speed * elbowSpeed);
     } else {
       m_elbowMotor.stopMotor();
     }
@@ -177,12 +180,17 @@ public class ArmJointsSubsystem extends SubsystemBase {
 
   public void setElbowStates(TrapezoidProfile.State elbowState) {
     // determine move direction
-    boolean isElbowMoveFwd = true;
+    boolean isElbowMoveFwd = true; // how to tell from elbowState - use Position but should it be current or at start?
+    if (elbowState.position > m_elbowAngle.getPosition()) {
+      isElbowMoveFwd = false;
+    }
     if (canElbowMove(isElbowMoveFwd)) {
       m_elbowPIDCntl.setReference(elbowState.position,
           ControlType.kPosition,
           0,
           m_elbowFeedforward.calculate(elbowState.velocity));
+    } else {
+      stopElbowMove();
     }
   }
 

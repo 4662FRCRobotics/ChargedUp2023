@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
+import frc.robot.commands.MoveTrapProfileElbow;
 import frc.robot.subsystems.ArmHandSubsystem;
 import frc.robot.subsystems.ArmJointsSubsystem;
 import frc.robot.subsystems.AutonomousSubsystem;
@@ -114,16 +115,19 @@ public class RobotContainer {
     m_operatorController
         .Start()
         .onTrue(Commands.runOnce(() -> m_ArmJointsSubsystem.stopArm(), m_ArmJointsSubsystem));
+
     m_operatorController
         .RB()
         .onTrue(Commands.runOnce(() -> m_ArmHand.OpenHand(), m_ArmHand));
+        
     m_operatorController
         .LB()
         .onTrue(Commands.runOnce(() -> m_ArmHand.CloseHand(), m_ArmHand));
-    /*m_operatorController
+
+    m_operatorController
         .X()
-        .onTrue(Commands.runOnce(() -> m_ArmHand.StopHandMotors(), m_ArmHand));
-    */
+        .onTrue(new MoveTrapProfileElbow(40, m_ArmJointsSubsystem));
+    
 
   }
 

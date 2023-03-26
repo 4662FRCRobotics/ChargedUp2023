@@ -95,7 +95,7 @@ public final class Constants {
     // convert abs encoder angle to degrees just because it is easyer to work with
     public static final double kELBOW_ANGLE_CONVERSION = 360;
     public static final double kELBOW_PARK_LIMIT = 32;
-    public static final double kBUMPER_SETPOINT = 108;
+    public static final double kBUMPER_SETPOINT = 40;
     public static final double kELBOW_TOP_LIMIT = 90;
 
     public static final double kHIGH_GOAL_POS = 40;
@@ -107,8 +107,8 @@ public final class Constants {
     public static final double kELBOW_CNTL_D = 3;
     public static final double kELBOW_CNTL_IZONE = 0;
     public static final double kELBOW_CNTL_FF = 0;
-    public static final double kELBOW_CNTL_MAX_OUT = 1.0;
-    public static final double kELBOW_CNTL_MIN_OUT = -1.0;
+    public static final double kELBOW_CNTL_MAX_OUT = 0.25; //if these are "set" values they really need to slow down.
+    public static final double kELBOW_CNTL_MIN_OUT = -0.35; // faster up than down???
 
     public static final double kELBOW_FF_S_VOLTS = 0.5;
     public static final double kELBOW_FF_V_VOLT_SECOND_PER_UNIT = 1;
@@ -118,7 +118,8 @@ public final class Constants {
     public static final double kELBOW_ACCELERATION_PER_SECOND_SQ = 0.25;
     public static final boolean kIS_SHOULDER_INVERTED = true;
 
-    public static final double kELBOW_SPEED = 0.65;
+    public static final double kELBOW_SPEED_UP = 0.55;
+    public static final double kELBOW_SPEED_DOWN = 0.35;
   }
 
   public static class HandConstants {
