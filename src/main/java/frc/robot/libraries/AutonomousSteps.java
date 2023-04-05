@@ -16,6 +16,7 @@ public enum AutonomousSteps {
     FINDSUMPIN,
     END,
     PLACECONEM,
+    BALANCE,
     MOVEARM;
 
 }
