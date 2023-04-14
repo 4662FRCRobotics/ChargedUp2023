@@ -21,7 +21,7 @@ public class AutoBalance extends CommandBase {
   private double singleTapTime;
   private double scoringBackUpTime;
   private double doubleTapTime;
-private boolean bIsBalanced;
+  private boolean bIsBalanced;
   private DriveSubsystem m_drive;
 
   public AutoBalance(DriveSubsystem drive) {
@@ -29,7 +29,7 @@ private boolean bIsBalanced;
     mRioAccel = new BuiltInAccelerometer();
     state = 0;
     debounceCount = 0;
-
+    m_drive = drive;
     /**********
      * CONFIG *
      **********/
@@ -72,7 +72,7 @@ private boolean bIsBalanced;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-bIsBalanced = false;
+    bIsBalanced = false;
   }
 
   // returns the magnititude of the robot's tilt calculated by the root of
@@ -94,7 +94,7 @@ bIsBalanced = false;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(autoBalanceRoutine(), 0);
+    m_drive.arcadeDrive(-autoBalanceRoutine(), 0);
   }
 
   public double autoBalanceRoutine() {
@@ -137,7 +137,7 @@ bIsBalanced = false;
           return -0.1;
         }
       case 3:
-      bIsBalanced = true;
+        bIsBalanced = true;
         return 0;
     }
     return 0;
