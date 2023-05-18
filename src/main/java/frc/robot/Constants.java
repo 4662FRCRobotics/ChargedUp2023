@@ -3,14 +3,23 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
+
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -30,8 +39,9 @@ public final class Constants {
 
     public static final double kLOW_GEAR_REDUCTION = (42.0 / 12.0) * (60.0 / 14.0);
     public static final double kHIGH_GEAR_REDUCTION = (42.0 / 12.0) * (50.0 / 24.0);
-    public static final double kENCODER_DISTANCE_PER_PULSE_M_HIGH = ((double) kPULSE_PER_ROTATION / kHIGH_GEAR_REDUCTION);
-    public static final double kENCODER_DISTANCE_PER_PULSE_M_LOW = ((double) kPULSE_PER_ROTATION   / kLOW_GEAR_REDUCTION);
+    public static final double kENCODER_DISTANCE_PER_PULSE_M_HIGH = ((double) kPULSE_PER_ROTATION
+        / kHIGH_GEAR_REDUCTION);
+    public static final double kENCODER_DISTANCE_PER_PULSE_M_LOW = ((double) kPULSE_PER_ROTATION / kLOW_GEAR_REDUCTION);
     // * (kTIRE_SIZE_M * Math.PI);
     public static final double kTRACK_WIDTH_M = 0.64;
 
@@ -44,9 +54,7 @@ public final class Constants {
     public static final double kMAX_SPEED_METERS_PER_SECOND = 4;
     public static final double kMAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
 
-
-    public static final DifferentialDriveKinematics kDRIVE_KINEMATICS = 
-    new DifferentialDriveKinematics(kTRACK_WIDTH_M);
+    public static final DifferentialDriveKinematics kDRIVE_KINEMATICS = new DifferentialDriveKinematics(kTRACK_WIDTH_M);
     // shifter numatic ports
     public static final int kSHIFT_UP = 1;
     public static final int kSHIFT_DOWN = 0;
@@ -68,13 +76,22 @@ public final class Constants {
      * public static final double kKEEP_HEADING_D = 0.4;
      * public static final double kKEEP_HEADING_TOLERANCE = 1;
      */
-}
+  }
+
   public static class OperatorConstants {
 
     public static final int kDriverControllerPort = 0;
     public static final int kAUTONOMOUS_CONSOLE_PORT = 2;
   }
+
   public static final class VisionConstants {
     public static final int VISION_SAMPLE_COUNT = 5;
-}
+    public static final Transform3d robotToCam = new Transform3d(
+        new Translation3d(0.5, 0.0, 0.5),
+        new Rotation3d(
+            0, 0,
+            0));
+            // Cam mounted facing forward, half a meter forward of center, half a meter up
+        // from center.
+  }
 }
