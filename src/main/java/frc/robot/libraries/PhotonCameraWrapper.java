@@ -25,7 +25,7 @@ public class PhotonCameraWrapper {
 
     public PhotonCameraWrapper() {
         // Change the name of your camera here to whatever it is in the PhotonVision UI.
-        photonCamera = new PhotonCamera("cameraName");
+        photonCamera = new PhotonCamera(VisionConstants.kCAMERA_NAME);
 
         try {
             // Attempt to load the AprilTagFieldLayout that will tell us where the tags are on the field.

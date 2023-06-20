@@ -85,6 +85,7 @@ public final class Constants {
   }
 
   public static final class VisionConstants {
+    public static final String kCAMERA_NAME = "fwdCamera";
     public static final int VISION_SAMPLE_COUNT = 2;
     public static final Transform3d robotToCam = new Transform3d(
         new Translation3d(0.5, 0.0, 0.5),

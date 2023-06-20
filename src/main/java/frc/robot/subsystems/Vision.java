@@ -15,10 +15,11 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
-  PhotonCamera camera = new PhotonCamera("fwdCamera");
+  PhotonCamera camera = new PhotonCamera(VisionConstants.kCAMERA_NAME);
   private double m_dyaw;
   private double m_dpitch;
   private double m_darea;
