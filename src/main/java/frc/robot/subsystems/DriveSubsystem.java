@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -30,6 +31,7 @@ import frc.robot.libraries.PhotonCameraWrapper;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new Drive. */
+
   private ConsoleJoystick m_console;
   private CANSparkMax m_leftController1;
   private CANSparkMax m_leftController2;
@@ -85,13 +87,17 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_leftEncoder = m_leftController1.getEncoder();
     m_rightEncoder = m_rightController1.getEncoder();
+    
+
     // super(
     // The PIDController used by the subsystem
     // new PIDController(0, 0, 0));
+ 
   }
 
   @Override
   public void periodic() {
+
   }
 
   public void updateOdometry() {

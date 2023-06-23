@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -31,9 +32,9 @@ import frc.robot.libraries.StepState;
 
 public class AutonomousSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-
+  private Field2d m_field = new Field2d();
   private DriveSubsystem m_drive;
-
+  
   AutonomousCommandSelector<AutonomousSteps> m_autoCommand;
   private String kAUTO_TAB = "Autonomous";
   private String kSTATUS_PEND = "PEND";
