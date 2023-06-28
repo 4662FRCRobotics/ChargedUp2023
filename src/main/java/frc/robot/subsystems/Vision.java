@@ -11,11 +11,13 @@ import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.targeting.TargetCorner;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase {
@@ -89,7 +91,20 @@ public class Vision extends SubsystemBase {
     }
 
   }
-
+public double GetTurn(){
+  double rotationSpeed;
+  var result = camera.getLatestResult();
+  PIDController turnController = new PIDController( DriveConstants.kTURN_ANGLE_P, 0,  DriveConstants.kTURN_ANGLE_D);
+  if (result.hasTargets()) {
+    // Calculate angular turn power
+    // -1.0 required to ensure positive PID controller effort _increases_ yaw
+    rotationSpeed = -turnController.calculate(result.getBestTarget().getYaw(), 0);
+} else {
+    // If we have no targets, stay still.
+    rotationSpeed = 0;
+}
+return rotationSpeed;
+}
   public double getYaw() {
     return m_dyaw;
   }

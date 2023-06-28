@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
+import frc.robot.commands.cameraDrive;
 import frc.robot.subsystems.AutonomousSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Vision;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -31,7 +33,7 @@ public class RobotContainer {
 
   private final AutoSelect m_autoSelect = new AutoSelect(m_autonomous);
   private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive);
-
+private final cameraDrive m_CameraDrive = new cameraDrive(m_robotDrive, m_vision);
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
 
@@ -50,6 +52,8 @@ public class RobotContainer {
                 -m_driverController.getY() * (1 - ((m_driverController.getThrottle() + 1) * 0.25)),
                 -m_driverController.getX()),
             m_robotDrive));
+            new JoystickButton(m_driverController, 1).onTrue(m_CameraDrive);
+            
   }
 
   /**
