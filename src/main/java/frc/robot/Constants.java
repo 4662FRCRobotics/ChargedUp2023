@@ -95,7 +95,7 @@ public final class Constants {
     // convert abs encoder angle to degrees just because it is easyer to work with
     public static final double kELBOW_ANGLE_CONVERSION = 360;
     public static final double kELBOW_PARK_LIMIT = 32;
-    public static final double kBUMPER_SETPOINT = 108;
+    public static final double kBUMPER_SETPOINT = 0;
     public static final double kELBOW_TOP_LIMIT = 90;
 
     public static final double kHIGH_GOAL_POS = 40;
