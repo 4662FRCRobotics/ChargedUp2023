@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -221,17 +222,17 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_iPatternSelect = -1;
 
     // build commands and step controls
-    m_wait1 = new WaitCommand(1.0);
-    m_autoCommand.addOption(AutonomousSteps.WAIT1, m_wait1);
+    //m_wait1 = new WaitCommand(1.0);
+    //m_autoCommand.addOption(AutonomousSteps.WAIT1, m_wait1);
     m_stepWait1Sw1 = new StepState(AutonomousSteps.WAIT1, m_ConsoleAuto.getSwitchSupplier(1));
 
-    m_wait2 = new WaitCommand(2.0);
-    m_autoCommand.addOption(AutonomousSteps.WAIT2, m_wait2);
+    //m_wait2 = new WaitCommand(2.0);
+    //m_autoCommand.addOption(AutonomousSteps.WAIT2, m_wait2);
     m_stepWait2Sw1 = new StepState(AutonomousSteps.WAIT2, m_ConsoleAuto.getSwitchSupplier(1));
     m_stepWait2Sw2 = new StepState(AutonomousSteps.WAIT2, m_ConsoleAuto.getSwitchSupplier(2));
 
-    m_waitForCount = new WaitForCount(1, () -> m_ConsoleAuto.getROT_SW_1());
-    m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
+    //m_waitForCount = new WaitForCount(1, () -> m_ConsoleAuto.getROT_SW_1());
+    //m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
     m_stepWaitForCount = new StepState(AutonomousSteps.WAITLOOP);
 
     //does not stop, fix before next use
@@ -351,7 +352,21 @@ public class AutonomousSubsystem extends SubsystemBase {
     while (m_currentCommand == null && !m_bIsCommandDone) {
       m_currentStepName = getNextActiveCommand(completionAction);
       if (m_currentStepName != null) {
-        m_currentCommand = m_autoCommand.getSelected(m_currentStepName);
+        switch (m_currentStepName) {
+          case WAIT1:
+            m_currentCommand = getWaitCommand(1);
+            break; 
+          case WAIT2:
+            m_currentCommand = getWaitCommand(2);
+            break;
+          case WAITLOOP:
+            m_currentCommand = getWaitCommand(m_ConsoleAuto.getROT_SW_1());
+            break;
+          default:
+            m_currentCommand = m_autoCommand.getSelected(m_currentStepName);
+            break;
+        }
+        
         if (m_currentCommand == null) {
           completionAction = kSTATUS_NULL;
         }
@@ -398,4 +413,7 @@ public class AutonomousSubsystem extends SubsystemBase {
     return m_bIsCommandDone;
   }
 
+  public Command getWaitCommand(double seconds) {
+    return Commands.waitSeconds(seconds);
+  }
 }
