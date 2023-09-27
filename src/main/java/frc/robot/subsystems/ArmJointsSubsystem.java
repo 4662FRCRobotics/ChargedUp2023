@@ -62,8 +62,10 @@ public class ArmJointsSubsystem extends SubsystemBase {
     // m_ShoulderMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
     // LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
 
-    // m_elbowRevLimit = m_elbowMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
-    // m_elbowFwdLimit = m_elbowMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    // m_elbowRevLimit =
+    // m_elbowMotor.getReverseLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    // m_elbowFwdLimit =
+    // m_elbowMotor.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
     // m_elbowFwdLimit.enableLimitSwitch(true);
     // m_elbowRevLimit.enableLimitSwitch(true);
 
@@ -100,27 +102,30 @@ public class ArmJointsSubsystem extends SubsystemBase {
     stopElbowMove();
   }
 
-  
-   public void moveShoulder(double speed) {
-   // direct test of elbow sensor or depend on command? may be non-standard to
-   // direct test
-   // set motor controller
-    if (speed > 0) {
-      if (m_elbowAngle.getPosition() >= Constants.ArmConstants.kBUMPER_SETPOINT) {
-        m_ShoulderMotor.set(speed);
-      } else {
-        m_ShoulderMotor.stopMotor();
-      }
-    } else {
-      m_ShoulderMotor.set(speed);
-    }
-   
-   }
-   
-   public void stopShoulderMove() {
-    m_ShoulderMotor.stopMotor();
-   }
-  /* 
+  public void moveShoulder(double speed) {
+    // direct test of elbow sensor or depend on command? may be non-standard to
+    // direct test
+    // set motor controller
+    /*
+     * if (speed > 0) {
+     * if (m_elbowAngle.getPosition() >= Constants.ArmConstants.kBUMPER_SETPOINT) {
+     * m_ShoulderMotor.set(speed);
+     * } else {
+     * m_ShoulderMotor.stopMotor();
+     * }
+     * } else {
+     * m_ShoulderMotor.set(speed);
+     * }
+     */
+    m_ShoulderMotor.set(speed);
+
+  }
+
+  public void stopShoulderMove() {
+    // m_ShoulderMotor.stopMotor();
+  }
+
+  /*
    * public boolean isShoulderParked() {
    * // retracted limit switch
    * m_isArmParked = m_ShoulderMotor.isRevLimitSwitchClosed() == 1;
@@ -140,13 +145,14 @@ public class ArmJointsSubsystem extends SubsystemBase {
    */
   public void moveElbow(double speed) {
 
+    m_elbowMotor.set(speed * Constants.ArmConstants.kELBOW_SPEED);
     boolean isElbowMoveFwd = true;
     if (speed > 0) {
       isElbowMoveFwd = false;
     }
 
     if (canElbowMove(isElbowMoveFwd)) {
-      m_elbowMotor.set(speed * Constants.ArmConstants.kELBOW_SPEED);
+
     } else {
       m_elbowMotor.stopMotor();
     }
@@ -195,14 +201,14 @@ public class ArmJointsSubsystem extends SubsystemBase {
         isElbowMovable = false;
       }
     } else {
-      /*
-       * // arm is moving back
-       * if (!isShoulderParked()) {
-       * if (m_elbowAngle.getPosition() <= Constants.ArmConstants.kBUMPER_SETPOINT) {
-       * isElbowMovable = false;
-       * }
-       * }
-       */
+
+      // arm is moving back
+     /*  if (!isShoulderParked()) {
+        if (m_elbowAngle.getPosition() <= Constants.ArmConstants.kBUMPER_SETPOINT) {
+          isElbowMovable = false;
+        }
+      }*/
+
       if (m_elbowAngle.getPosition() <= Constants.ArmConstants.kELBOW_PARK_LIMIT) {
         isElbowMovable = false;
       }
