@@ -94,7 +94,7 @@ public final class Constants {
     public static final double kARM_RAMP_RATE = .5;
     // convert abs encoder angle to degrees just because it is easyer to work with
     public static final double kELBOW_ANGLE_CONVERSION = 360;
-    public static final double kELBOW_PARK_LIMIT = 340;
+    public static final double kELBOW_PARK_LIMIT = 330;
     public static final double kBUMPER_SETPOINT = 0;
     public static final double kELBOW_TOP_LIMIT = 240;
 

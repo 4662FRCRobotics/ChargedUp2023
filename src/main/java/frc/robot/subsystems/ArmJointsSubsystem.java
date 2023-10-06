@@ -145,14 +145,14 @@ public class ArmJointsSubsystem extends SubsystemBase {
    */
   public void moveElbow(double speed) {
 
-    m_elbowMotor.set(speed * Constants.ArmConstants.kELBOW_SPEED);
+   
     boolean isElbowMoveFwd = true;
     if (speed > 0) {
       isElbowMoveFwd = false;
     }
-
+SmartDashboard.putBoolean("is elbow fwd", isElbowMoveFwd);
     if (canElbowMove(isElbowMoveFwd)) {
-
+ m_elbowMotor.set(speed * Constants.ArmConstants.kELBOW_SPEED);
     } else {
       m_elbowMotor.stopMotor();
     }
@@ -193,12 +193,12 @@ public class ArmJointsSubsystem extends SubsystemBase {
   }
 
   public boolean canElbowMove(boolean isElbowMoveFwd) {
-    boolean isElbowMovable = true;
+    boolean isElbowMovable = false;
 
     if (isElbowMoveFwd) {
       // arm is moving out
       if (m_elbowAngle.getPosition() >= Constants.ArmConstants.kELBOW_TOP_LIMIT) {
-        isElbowMovable = false;
+        isElbowMovable = true;
       }
     } else {
 
@@ -210,7 +210,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
       }*/
 
       if (m_elbowAngle.getPosition() <= Constants.ArmConstants.kELBOW_PARK_LIMIT) {
-        isElbowMovable = false;
+        isElbowMovable = true;
       }
     }
     if (!isElbowMovable) {

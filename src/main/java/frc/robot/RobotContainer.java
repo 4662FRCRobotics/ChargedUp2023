@@ -73,7 +73,7 @@ public class RobotContainer {
 
     m_ArmJointsSubsystem.setDefaultCommand(
         Commands.run(
-            () -> m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY(), m_operatorController.getRightY()),
+            () -> m_ArmJointsSubsystem.moveArm(-m_operatorController.getLeftY(), m_operatorController.getRightY()),
             m_ArmJointsSubsystem));
     
     m_ArmHand.setDefaultCommand(
