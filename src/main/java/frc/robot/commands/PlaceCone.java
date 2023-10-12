@@ -21,6 +21,7 @@ public class PlaceCone extends CommandBase {
   public void initialize() {
     // make sure arm is extended
     m_armHand.StartHandMotors( 1.0);
+    m_armHand.OpenHand();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
