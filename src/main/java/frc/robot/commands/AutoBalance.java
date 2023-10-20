@@ -34,7 +34,7 @@ public class AutoBalance extends CommandBase {
      * CONFIG *
      **********/
     // Speed the robot drived while scoring/approaching station, default = 0.4
-    robotSpeedFast = 0.4;
+    robotSpeedFast = 0.6;
 
     // Speed the robot drives while balancing itself on the charge station.
     // Should be roughly half the fast speed, to make the robot more accurate,
@@ -42,7 +42,7 @@ public class AutoBalance extends CommandBase {
     robotSpeedSlow = 0.2;
 
     // Angle where the robot knows it is on the charge station, default = 13.0
-    onChargeStationDegree = 13.0;
+    onChargeStationDegree = 5.0;
 
     // Angle where the robot can assume it is level on the charging station
     // Used for exiting the drive forward sequence as well as for auto balancing,
@@ -53,7 +53,7 @@ public class AutoBalance extends CommandBase {
     // seconds
     // Reduces the impact of sensor noice, but too high can make the auto run
     // slower, default = 0.2
-    debounceTime = 0.2;
+    debounceTime = 0.1;
 
     // Amount of time to drive towards to scoring target when trying to bump the
     // game piece off
@@ -94,22 +94,26 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println(state);
+    System.out.println(getTilt());
     m_drive.arcadeDrive(-autoBalanceRoutine(), 0);
   }
 
   public double autoBalanceRoutine() {
+    state = 0;
+
     switch (state) {
       // drive forwards to approach station, exit when tilt is detected
       case 0:
-        if (getTilt() > onChargeStationDegree) {
+        if (Math.abs(getTilt()) > onChargeStationDegree) {
           debounceCount++;
         }
-        if (debounceCount > secondsToTicks(debounceTime)) {
+        if (debounceCount > 1) {
           state = 1;
           debounceCount = 0;
-          return robotSpeedSlow;
+          return robotSpeedFast;
         }
-        return robotSpeedFast;
+        return 1;
       // driving up charge station, drive slower, stopping when level
       case 1:
         if (getTilt() < levelDegree) {
