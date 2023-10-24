@@ -55,7 +55,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_elbowMotor.setInverted(true);
     m_elbowMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     m_elbowMotor.setOpenLoopRampRate(Constants.ArmConstants.kARM_RAMP_RATE);
-    m_ShoulderMotor.configClosedloopRamp(Constants.ArmConstants.kARM_RAMP_RATE);
+    //m_ShoulderMotor.configClosedloopRamp(Constants.ArmConstants.kARM_RAMP_RATE);  not needed for a linear actuator
 
     // m_ShoulderMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
     // LimitSwitchNormal.NormallyOpen, Constants.ArmConstants.kShoulderPort);
