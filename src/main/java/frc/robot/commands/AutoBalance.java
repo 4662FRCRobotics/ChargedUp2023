@@ -34,7 +34,7 @@ public class AutoBalance extends CommandBase {
      * CONFIG *
      **********/
     // Speed the robot drived while scoring/approaching station, default = 0.4
-    robotSpeedFast = 0.6;
+    robotSpeedFast = 0.9;
 
     // Speed the robot drives while balancing itself on the charge station.
     // Should be roughly half the fast speed, to make the robot more accurate,
@@ -42,7 +42,7 @@ public class AutoBalance extends CommandBase {
     robotSpeedSlow = 0.2;
 
     // Angle where the robot knows it is on the charge station, default = 13.0
-    onChargeStationDegree = 5.0;
+    onChargeStationDegree = 10.0;
 
     // Angle where the robot can assume it is level on the charging station
     // Used for exiting the drive forward sequence as well as for auto balancing,
@@ -53,7 +53,7 @@ public class AutoBalance extends CommandBase {
     // seconds
     // Reduces the impact of sensor noice, but too high can make the auto run
     // slower, default = 0.2
-    debounceTime = 0.1;
+    debounceTime = 0.5;
 
     // Amount of time to drive towards to scoring target when trying to bump the
     // game piece off
@@ -95,25 +95,26 @@ public class AutoBalance extends CommandBase {
   @Override
   public void execute() {
     System.out.println(state);
-    System.out.println(getTilt());
+    //System.out.println(getTilt());
     m_drive.arcadeDrive(-autoBalanceRoutine(), 0);
   }
 
   public double autoBalanceRoutine() {
-    state = 0;
+    //state = 0;
 
     switch (state) {
       // drive forwards to approach station, exit when tilt is detected
       case 0:
         if (Math.abs(getTilt()) > onChargeStationDegree) {
           debounceCount++;
+          //state = 1;
         }
-        if (debounceCount > 1) {
+        if (debounceCount > 20) {
           state = 1;
           debounceCount = 0;
           return robotSpeedFast;
         }
-        return 1;
+        return robotSpeedFast;
       // driving up charge station, drive slower, stopping when level
       case 1:
         if (getTilt() < levelDegree) {
@@ -131,7 +132,7 @@ public class AutoBalance extends CommandBase {
           debounceCount++;
         }
         if (debounceCount > secondsToTicks(debounceTime)) {
-          state = 4;
+          state = 3;
           debounceCount = 0;
           return 0;
         }
