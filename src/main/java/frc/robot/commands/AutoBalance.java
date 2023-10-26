@@ -4,13 +4,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+//import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class AutoBalance extends CommandBase {
   /** Creates a new AutoBalance. */
-  private BuiltInAccelerometer mRioAccel;
+  //private BuiltInAccelerometer mRioAccel;
   private int state;
   private int debounceCount;
   private double robotSpeedSlow;
@@ -18,15 +18,15 @@ public class AutoBalance extends CommandBase {
   private double onChargeStationDegree;
   private double levelDegree;
   private double debounceTime;
-  private double singleTapTime;
-  private double scoringBackUpTime;
-  private double doubleTapTime;
+  //private double singleTapTime;
+  //private double scoringBackUpTime;
+  //private double doubleTapTime;
   private boolean bIsBalanced;
   private DriveSubsystem m_drive;
 
   public AutoBalance(DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    mRioAccel = new BuiltInAccelerometer();
+    //mRioAccel = new BuiltInAccelerometer();
     state = 0;
     debounceCount = 0;
     m_drive = drive;
@@ -58,14 +58,14 @@ public class AutoBalance extends CommandBase {
     // Amount of time to drive towards to scoring target when trying to bump the
     // game piece off
     // Time it takes to go from starting position to hit the scoring target
-    singleTapTime = 0.4;
+    //singleTapTime = 0.4;
 
     // Amount of time to drive away from knocked over gamepiece before the second
     // tap
-    scoringBackUpTime = 0.2;
+    //scoringBackUpTime = 0.2;
 
     // Amount of time to drive forward to secure the scoring of the gamepiece
-    doubleTapTime = 0.3;
+   // doubleTapTime = 0.3;
     addRequirements(m_drive);
   }
 
@@ -73,6 +73,7 @@ public class AutoBalance extends CommandBase {
   @Override
   public void initialize() {
     bIsBalanced = false;
+    state = 0;
   }
 
   // returns the magnititude of the robot's tilt calculated by the root of
