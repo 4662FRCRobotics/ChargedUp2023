@@ -94,9 +94,9 @@ public final class Constants {
     public static final double kARM_RAMP_RATE = .5;
     // convert abs encoder angle to degrees just because it is easyer to work with
     public static final double kELBOW_ANGLE_CONVERSION = 360;
-    public static final double kELBOW_PARK_LIMIT = 32;
-    public static final double kBUMPER_SETPOINT = 108;
-    public static final double kELBOW_TOP_LIMIT = 90;
+    public static final double kELBOW_PARK_LIMIT = 330;
+    public static final double kBUMPER_SETPOINT = 0;
+    public static final double kELBOW_TOP_LIMIT = 240;
 
     public static final double kHIGH_GOAL_POS = 40;
     public static final int kMAX_SHOULDER_AMP_LIMIT = 20;
@@ -116,7 +116,7 @@ public final class Constants {
 
     public static final double kELBOW_MAX_SPEED_PER_SECOND = 0.5;
     public static final double kELBOW_ACCELERATION_PER_SECOND_SQ = 0.25;
-    public static final boolean kIS_SHOULDER_INVERTED = true;
+    public static final boolean kIS_SHOULDER_INVERTED = false;
 
     public static final double kELBOW_SPEED = 0.65;
   }
