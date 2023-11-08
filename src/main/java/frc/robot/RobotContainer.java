@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.AutoControl;
 import frc.robot.commands.AutoSelect;
 import frc.robot.subsystems.ArmHandSubsystem;
@@ -49,14 +50,14 @@ public class RobotContainer {
   private final ConsoleAuto m_consoleAuto = new ConsoleAuto(OperatorConstants.kAUTONOMOUS_CONSOLE_PORT);
 
   private final AutonomousSubsystem m_autonomous = new AutonomousSubsystem(m_consoleAuto,
-    m_robotDrive,
-    m_ArmJointsSubsystem,
-   m_ArmHand
-  );
+      m_robotDrive,
+      m_ArmJointsSubsystem,
+      m_ArmHand);
 
   private final AutoSelect m_autoSelect = new AutoSelect(m_autonomous);
-  private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive, m_ArmHand, m_ArmJointsSubsystem);
-
+  private final AutoControl m_autoCommand = new AutoControl(m_autonomous, m_robotDrive, m_ArmHand,
+      m_ArmJointsSubsystem);
+  private final AutoBalance m_AutoBalance = new AutoBalance(m_robotDrive);
   private final CommandGamepadX m_driverController = new CommandGamepadX(OperatorConstants.kDriverControllerPort);
   private final CommandGamepadX m_operatorController = new CommandGamepadX(OperatorConstants.kOPERATOR_CONTROLLER_PORT);
 
@@ -67,19 +68,20 @@ public class RobotContainer {
 
     m_robotDrive.setDefaultCommand(
         Commands.run(
-            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), -m_driverController.getRightX()*Constants.DriveConstants.kTURN_SPEED),
+            () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(),
+                -m_driverController.getRightX() * Constants.DriveConstants.kTURN_SPEED),
             m_robotDrive));
 
     m_ArmJointsSubsystem.setDefaultCommand(
         Commands.run(
             () -> m_ArmJointsSubsystem.moveArm(m_operatorController.getLeftY(), m_operatorController.getRightY()),
             m_ArmJointsSubsystem));
-    
+
     m_ArmHand.setDefaultCommand(
         Commands.run(
             () -> m_ArmHand.SetHandMotors(m_operatorController.getRightTrigger(),
-                            m_operatorController.getLeftTigger()), 
-                  m_ArmHand));
+                m_operatorController.getLeftTigger()),
+            m_ArmHand));
     configureBindings();
 
   }
@@ -109,6 +111,9 @@ public class RobotContainer {
         .RB()
         .onTrue(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kHIGH_GEAR_SPEED)))
         .onFalse(Commands.runOnce(() -> m_robotDrive.setMaxOutput(Constants.DriveConstants.kMEDIUM_GEAR_SPEED)));
+    m_driverController
+        .X()
+        .onTrue(m_AutoBalance);
 
     m_operatorController
         .Start()
@@ -119,10 +124,11 @@ public class RobotContainer {
     m_operatorController
         .LB()
         .onTrue(Commands.runOnce(() -> m_ArmHand.CloseHand(), m_ArmHand));
-    /*m_operatorController
-        .X()
-        .onTrue(Commands.runOnce(() -> m_ArmHand.StopHandMotors(), m_ArmHand));
-    */
+    /*
+     * m_operatorController
+     * .X()
+     * .onTrue(Commands.runOnce(() -> m_ArmHand.StopHandMotors(), m_ArmHand));
+     */
 
   }
 

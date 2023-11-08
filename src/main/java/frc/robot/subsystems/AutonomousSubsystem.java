@@ -12,6 +12,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ConsoleConstants;
+import frc.robot.commands.AutoBalance;
 import frc.robot.commands.MoveTrapProfileElbow;
 import frc.robot.commands.PlaceCone;
 import frc.robot.commands.RamseteDrivePath;
@@ -187,9 +189,10 @@ public class AutonomousSubsystem extends SubsystemBase {
   private StepState m_stepPlaceConeM;
   private RamseteDrivePath m_drive3Path;
   private StepState m_stepDrive3Path;
-  private StepState  m_stepMoveArm;
+  private StepState m_stepMoveArm;
   private Command m_moveArm;
-
+  private Command m_balance;
+  private StepState m_stepBalance;
   // private String m_path1JSON = "paths/Path1.wpilib.json";
   // private Trajectory m_trajPath1;
 
@@ -235,7 +238,7 @@ public class AutonomousSubsystem extends SubsystemBase {
     //m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
     m_stepWaitForCount = new StepState(AutonomousSteps.WAITLOOP);
 
-    //does not stop, fix before next use
+    // does not stop, fix before next use
     m_moveArm = new MoveTrapProfileElbow(ArmConstants.kHIGH_GOAL_POS, armJoint);
     m_autoCommand.addOption(AutonomousSteps.MOVEARM, m_moveArm);
     m_stepMoveArm = new StepState(AutonomousSteps.MOVEARM, m_ConsoleAuto.getSwitchSupplier(4));
@@ -252,6 +255,10 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_stepPlaceConeM = new StepState(AutonomousSteps.PLACECONEM,
         m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kPLACE_GAMEPIECE_SW));
 
+    m_balance = new AutoBalance(m_drive);
+    m_autoCommand.addOption(AutonomousSteps.BALANCE, m_balance);
+    m_stepBalance = new StepState(AutonomousSteps.BALANCE, m_ConsoleAuto.getSwitchSupplier(3));
+
     genTrajectory();
     m_drive3Path = new RamseteDrivePath(m_drive3Trajectory, kRESET_ODOMETRY, m_drive);
     m_autoCommand.addOption(AutonomousSteps.DRIVE3, m_drive3Path);
@@ -261,8 +268,9 @@ public class AutonomousSubsystem extends SubsystemBase {
     // array group length must match the enum entries in AutonomousCommands
     // anything extra is ignored
     m_cmdSteps = new StepState[][] {
-        { m_stepWaitForCount, m_stepPlaceConeM, m_stepDrive3Path }
-        //{ m_stepWaitForCount, m_stepMoveArm, m_stepPlaceConeM, m_stepDrive3Path }
+        { m_stepWaitForCount, m_stepPlaceConeM, m_stepDrive3Path },
+        { m_stepWaitForCount, m_stepPlaceConeM,  m_stepBalance }
+        // { m_stepWaitForCount, m_stepMoveArm, m_stepPlaceConeM, m_stepDrive3Path }
     };
     // the command lists are matched sequentially to the enum entries
 
@@ -273,8 +281,8 @@ public class AutonomousSubsystem extends SubsystemBase {
   private void genTrajectory() {
     m_drive3Trajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(1.5, 0)),
-        new Pose2d(2.5, 0, new Rotation2d(0)),
+        List.of(new Translation2d(-1.5, 0)),
+        new Pose2d(-2.5, 0, new Rotation2d(0)),
         m_drive.getTrajConfig());
   }
   // change posistions to constants at home

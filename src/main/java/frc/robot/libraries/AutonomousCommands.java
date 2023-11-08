@@ -6,7 +6,8 @@ package frc.robot.libraries;
 
 /** Add your docs here. */
 public enum AutonomousCommands {
-    GENERIC_DEFAULT;
+    GENERIC_DEFAULT,
+    BALANCE;
 
 
     public String getSelectName() {
