@@ -268,7 +268,7 @@ public class AutonomousSubsystem extends SubsystemBase {
     // anything extra is ignored
     m_cmdSteps = new StepState[][] {
         { m_stepWaitForCount, m_stepPlaceConeM, m_stepDrive3Path },
-        { m_stepWaitForCount, m_stepPlaceConeM, m_stepDrive3Path, m_stepBalance }
+        { m_stepWaitForCount, m_stepPlaceConeM,  m_stepBalance }
         // { m_stepWaitForCount, m_stepMoveArm, m_stepPlaceConeM, m_stepDrive3Path }
     };
     // the command lists are matched sequentially to the enum entries
