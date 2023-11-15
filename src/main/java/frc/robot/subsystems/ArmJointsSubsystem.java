@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,6 +34,8 @@ public class ArmJointsSubsystem extends SubsystemBase {
   private WPI_TalonSRX m_ShoulderMotor;
   private CANSparkMax m_elbowMotor;
 
+  private AnalogPotentiometer m_Potentiometer;
+  //max fwd .255 max rev .038
   private SparkMaxLimitSwitch m_elbowRevLimit;
   private SparkMaxLimitSwitch m_elbowFwdLimit;
   private SparkMaxAbsoluteEncoder m_elbowAngle;
@@ -47,6 +50,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
     m_ShoulderMotor = new WPI_TalonSRX(Constants.ArmConstants.kSHOULDER_PORT);
     m_ShoulderMotor.setInverted(Constants.ArmConstants.kIS_SHOULDER_INVERTED);
 
+    m_Potentiometer = new AnalogPotentiometer(0, 270);
     m_elbowMotor = new CANSparkMax(Constants.ArmConstants.kELBOW_PORT, MotorType.kBrushless);
 
     m_elbowMotor.setSmartCurrentLimit(Constants.ArmConstants.kMAX_ELBOW_AMPS);
@@ -88,6 +92,7 @@ public class ArmJointsSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("angle of shoulder", m_Potentiometer.get());
     SmartDashboard.putNumber("angle of elbow encoder", m_elbowAngle.getPosition());
     // This method will be called once per scheduler run
   }
