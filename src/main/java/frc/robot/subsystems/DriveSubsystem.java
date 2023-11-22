@@ -4,27 +4,94 @@
 
 package frc.robot.subsystems;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.List;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.libraries.ConsoleJoystick;
 
 public class DriveSubsystem extends SubsystemBase {
+
+  public enum DrivePath {
+    SIMPLE (0, 0, -2.5, 0);
+
+    private final double m_dStartX;
+    private final double m_dStartY;
+    private final double m_dMidX;
+    private final double m_dMidY;
+    private final double m_dEndX;
+    private final double m_dEndY;
+
+    private DrivePath(double dStartX, double dStartY, double dEndX, double dEndY)
+    {
+      this.m_dStartX = dStartX;
+      this.m_dStartY = dStartY;
+      this.m_dMidX = ((dStartX + dEndX) / 2);
+      this.m_dMidY = ((dStartY + dEndY) / 2);
+      this.m_dEndX = dEndX;
+      this.m_dEndY = dEndY;
+    }
+    
+    private DrivePath(double dStartX, double dStartY, double dMidX, double dMidY, double dEndX, double dEndY)
+    {
+      this.m_dStartX = dStartX;
+      this.m_dStartY = dStartY;
+      this.m_dMidX = dMidX;
+      this.m_dMidY = dMidY;
+      this.m_dEndX = dEndX;
+      this.m_dEndY = dEndY;
+    }
+
+    double getStartX(){
+      return m_dStartX;
+    }
+
+    double getStartY(){
+      return m_dStartY;
+    }
+
+    double getMidX() {
+      return m_dMidX;
+    }
+
+    double getMidY(){
+      return m_dMidY;
+    }
+
+    double getEndX(){
+      return m_dEndX;
+    }
+
+    double getEndY(){
+      return m_dEndY;
+    }
+
+  }
   /** Creates a new Drive. */
   private ConsoleJoystick m_console;
   private CANSparkMax m_leftController1;
@@ -200,6 +267,62 @@ public class DriveSubsystem extends SubsystemBase {
   private void resetEncoders() {
     m_leftEncoder1.setPosition(0);
     m_rightEncoder1.setPosition(0);
+  }
+
+  // generate an internal trajectory using specified begin, way points, and end
+
+  private Trajectory genTrajectory(DrivePath drivePath) {
+    return TrajectoryGenerator.generateTrajectory(
+        new Pose2d(drivePath.getStartX(), drivePath.getStartY(), new Rotation2d(0)),
+        List.of(new Translation2d(drivePath.getMidX(), drivePath.getMidY())),
+        new Pose2d(drivePath.getEndX(), drivePath.getEndY(), new Rotation2d(0)),
+        getTrajConfig());
+  }
+  // change posistions to constants at home
+
+  // read externally generated trajectory (path) from an external file in the
+  // standard "deploy" path
+  // these are generated from a standard tool such as pathweaver
+  private Trajectory readPaths(String jsonPath) {
+    Trajectory trajectory = null;
+    try {
+      Path trajPath = Filesystem.getDeployDirectory().toPath().resolve(jsonPath);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajPath);
+    } catch (IOException ex) {
+
+    }
+    return trajectory;
+  }
+
+  public Command getRamsetePath(DrivePath drivePath) {
+   
+    // use the voltage constraints and etc. from the constructor method
+
+    // An example trajectory to follow.  All units in meters.
+    Trajectory exampleTrajectory = genTrajectory(drivePath);
+
+    RamseteCommand ramseteCommand =
+        new RamseteCommand(
+            exampleTrajectory,
+            () -> getPos(),
+            new RamseteController(),
+            //new SimpleMotorFeedforward(
+            //    DriveConstants.ksVolts,
+            //    DriveConstants.kvVoltSecondsPerMeter,
+            //    DriveConstants.kaVoltSecondsSquaredPerMeter),
+            DriveConstants.kDRIVE_KINEMATICS,
+            //this::getWheelSpeeds,
+            //new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            //new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            // RamseteCommand passes volts to the callback
+            this::tankDriveVolts,
+            this);
+
+    // Reset odometry to the starting pose of the trajectory.
+    resetOdometry(exampleTrajectory.getInitialPose());
+
+    // Run path following command, then stop at the end.
+    return ramseteCommand.andThen(() -> tankDriveVolts(0, 0));
   }
 
 }

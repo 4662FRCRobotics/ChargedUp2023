@@ -28,13 +28,12 @@ import frc.robot.Constants.ConsoleConstants;
 import frc.robot.commands.AutoBalance;
 import frc.robot.commands.MoveTrapProfileElbow;
 import frc.robot.commands.PlaceCone;
-import frc.robot.commands.RamseteDrivePath;
-import frc.robot.commands.WaitForCount;
 import frc.robot.libraries.AutonomousCommands;
 import frc.robot.libraries.AutonomousSteps;
 import frc.robot.libraries.AutonomousCommandSelector;
 import frc.robot.libraries.ConsoleAuto;
 import frc.robot.libraries.StepState;
+import frc.robot.subsystems.DriveSubsystem.DrivePath;
 
 public class AutonomousSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -176,19 +175,13 @@ public class AutonomousSubsystem extends SubsystemBase {
   private boolean m_bIsCommandDone = false;
   private int m_stepIndex;
   private int m_iWaitCount;
-  private Trajectory m_drive3Trajectory;
-  private WaitCommand m_wait1;
-  private StepState m_stepWait1Sw1;
-  private WaitCommand m_wait2;
-  private StepState m_stepWait2Sw1;
-  private StepState m_stepWait2Sw2;
-  private StepState m_stepWait2SwAB;
-  private WaitForCount m_waitForCount;
   private StepState m_stepWaitForCount;
   private Command m_placeConeM;
   private StepState m_stepPlaceConeM;
-  private RamseteDrivePath m_drive3Path;
   private StepState m_stepDrive3Path;
+  private StepState m_stepWait1Sw1;
+  private StepState m_stepWait2Sw1;
+  private StepState m_stepWait2Sw2;
   private StepState m_stepMoveArm;
   private Command m_moveArm;
   private Command m_balance;
@@ -259,9 +252,6 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_autoCommand.addOption(AutonomousSteps.BALANCE, m_balance);
     m_stepBalance = new StepState(AutonomousSteps.BALANCE, m_ConsoleAuto.getSwitchSupplier(3));
 
-    genTrajectory();
-    m_drive3Path = new RamseteDrivePath(m_drive3Trajectory, kRESET_ODOMETRY, m_drive);
-    m_autoCommand.addOption(AutonomousSteps.DRIVE3, m_drive3Path);
     m_stepDrive3Path = new StepState(AutonomousSteps.DRIVE3,
         m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kDRIVE_PATTERN_1_SW));
 
@@ -274,31 +264,6 @@ public class AutonomousSubsystem extends SubsystemBase {
     };
     // the command lists are matched sequentially to the enum entries
 
-  }
-
-  // generate an internal trajectory using specified begin, way points, and end
-
-  private void genTrajectory() {
-    m_drive3Trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(-1.5, 0)),
-        new Pose2d(-2.5, 0, new Rotation2d(0)),
-        m_drive.getTrajConfig());
-  }
-  // change posistions to constants at home
-
-  // read externally generated trajectory (path) from an external file in the
-  // standard "deploy" path
-  // these are generated from a standard tool such as pathweaver
-  private Trajectory readPaths(String jsonPath) {
-    Trajectory trajectory = null;
-    try {
-      Path trajPath = Filesystem.getDeployDirectory().toPath().resolve(jsonPath);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajPath);
-    } catch (IOException ex) {
-
-    }
-    return trajectory;
   }
 
   @Override
@@ -361,6 +326,9 @@ public class AutonomousSubsystem extends SubsystemBase {
       m_currentStepName = getNextActiveCommand(completionAction);
       if (m_currentStepName != null) {
         switch (m_currentStepName) {
+          case DRIVE3:
+            m_currentCommand = m_drive.getRamsetePath(DrivePath.SIMPLE);
+            break;
           case WAIT1:
             m_currentCommand = getWaitCommand(1);
             break; 
