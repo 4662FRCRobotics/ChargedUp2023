@@ -1,28 +1,15 @@
 package frc.robot.subsystems;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ConsoleConstants;
 import frc.robot.commands.AutoBalance;
@@ -218,17 +205,12 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_iPatternSelect = -1;
 
     // build commands and step controls
-    //m_wait1 = new WaitCommand(1.0);
-    //m_autoCommand.addOption(AutonomousSteps.WAIT1, m_wait1);
+  
     m_stepWait1Sw1 = new StepState(AutonomousSteps.WAIT1, m_ConsoleAuto.getSwitchSupplier(1));
 
-    //m_wait2 = new WaitCommand(2.0);
-    //m_autoCommand.addOption(AutonomousSteps.WAIT2, m_wait2);
     m_stepWait2Sw1 = new StepState(AutonomousSteps.WAIT2, m_ConsoleAuto.getSwitchSupplier(1));
     m_stepWait2Sw2 = new StepState(AutonomousSteps.WAIT2, m_ConsoleAuto.getSwitchSupplier(2));
 
-    //m_waitForCount = new WaitForCount(1, () -> m_ConsoleAuto.getROT_SW_1());
-    //m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
     m_stepWaitForCount = new StepState(AutonomousSteps.WAITLOOP);
 
     // does not stop, fix before next use

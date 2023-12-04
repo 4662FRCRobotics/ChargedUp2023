@@ -38,7 +38,7 @@ import frc.robot.libraries.ConsoleJoystick;
 public class DriveSubsystem extends SubsystemBase {
 
   public enum DrivePath {
-    SIMPLE (0, 0, -2.5, 0);
+    SIMPLE (0, 0, (-2.5), 0);
 
     private final double m_dStartX;
     private final double m_dStartY;
