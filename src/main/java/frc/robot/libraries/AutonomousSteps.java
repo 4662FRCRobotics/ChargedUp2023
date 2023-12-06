@@ -17,6 +17,7 @@ public enum AutonomousSteps {
     END,
     PLACECONEM,
     BALANCE,
+    TURNPATH,
     MOVEARM;
 
 }

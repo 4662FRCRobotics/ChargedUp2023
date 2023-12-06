@@ -38,6 +38,54 @@ import frc.robot.libraries.StepState;
 
 public class AutonomousSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
+  private enum Paths {
+    BASIC(0, 0, 2.5, 0),
+    BEND(0,0,1,.5,2,0);
+
+    private final double m_dStartX;
+    private final double m_DStartY;
+    private final double m_DMidX;
+    private final double m_dMidY;
+    private final double m_dEndX;
+    private final double m_dEndY;
+
+    private Paths(double dStartX, double dStartY, double dEndX, double dEndY) {
+      this.m_dStartX = dStartX;
+      this.m_DStartY = dStartY;
+      this.m_DMidX = (dStartX + dEndX) / 2;
+      this.m_dMidY = (dStartY + dEndY) / 2;
+      this.m_dEndX = dEndX;
+      this.m_dEndY = dEndY;
+    }
+
+    private Paths(double dStartX, double dStartY, double dMidX, double dMidY, double dEndX, double dEndY) {
+      this.m_dStartX = dStartX;
+      this.m_DStartY = dStartY;
+      this.m_DMidX = dMidX;
+      this.m_dMidY = dMidY;
+      this.m_dEndX = dEndX;
+      this.m_dEndY = dEndY;
+    }
+    double getStartX(){
+      return m_dStartX;
+    }
+    double getStartY(){
+      return m_DStartY;
+    }
+    double getMidX(){
+      return m_DMidX;
+    }
+    double getMidY(){
+      return m_dMidY;
+    }
+    double getEndX(){
+      return m_dEndX;
+    }
+
+    double getEndY(){
+      return m_dEndY;
+    }
+  }
 
   private DriveSubsystem m_drive;
   private ArmJointsSubsystem m_armJoint;
@@ -193,6 +241,9 @@ public class AutonomousSubsystem extends SubsystemBase {
   private Command m_moveArm;
   private Command m_balance;
   private StepState m_stepBalance;
+
+  private Command m_turnPath;
+  private StepState m_stepturnPath;
   // private String m_path1JSON = "paths/Path1.wpilib.json";
   // private Trajectory m_trajPath1;
 
@@ -212,7 +263,8 @@ public class AutonomousSubsystem extends SubsystemBase {
   public AutonomousSubsystem(ConsoleAuto consoleAuto,
       DriveSubsystem drive,
       ArmJointsSubsystem armJoint,
-      ArmHandSubsystem armHand) {
+      ArmHandSubsystem armHand)
+   {
 
     m_ConsoleAuto = consoleAuto;
     m_drive = drive;
@@ -225,17 +277,17 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_iPatternSelect = -1;
 
     // build commands and step controls
-    //m_wait1 = new WaitCommand(1.0);
-    //m_autoCommand.addOption(AutonomousSteps.WAIT1, m_wait1);
+    // m_wait1 = new WaitCommand(1.0);
+    // m_autoCommand.addOption(AutonomousSteps.WAIT1, m_wait1);
     m_stepWait1Sw1 = new StepState(AutonomousSteps.WAIT1, m_ConsoleAuto.getSwitchSupplier(1));
 
-    //m_wait2 = new WaitCommand(2.0);
-    //m_autoCommand.addOption(AutonomousSteps.WAIT2, m_wait2);
+    // m_wait2 = new WaitCommand(2.0);
+    // m_autoCommand.addOption(AutonomousSteps.WAIT2, m_wait2);
     m_stepWait2Sw1 = new StepState(AutonomousSteps.WAIT2, m_ConsoleAuto.getSwitchSupplier(1));
     m_stepWait2Sw2 = new StepState(AutonomousSteps.WAIT2, m_ConsoleAuto.getSwitchSupplier(2));
 
-    //m_waitForCount = new WaitForCount(1, () -> m_ConsoleAuto.getROT_SW_1());
-    //m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
+    // m_waitForCount = new WaitForCount(1, () -> m_ConsoleAuto.getROT_SW_1());
+    // m_autoCommand.addOption(AutonomousSteps.WAITLOOP, m_waitForCount);
     m_stepWaitForCount = new StepState(AutonomousSteps.WAITLOOP);
 
     // does not stop, fix before next use
@@ -259,17 +311,20 @@ public class AutonomousSubsystem extends SubsystemBase {
     m_autoCommand.addOption(AutonomousSteps.BALANCE, m_balance);
     m_stepBalance = new StepState(AutonomousSteps.BALANCE, m_ConsoleAuto.getSwitchSupplier(3));
 
-    genTrajectory();
-    m_drive3Path = new RamseteDrivePath(m_drive3Trajectory, kRESET_ODOMETRY, m_drive);
+    //genTrajectory(Paths.BASIC);
+    m_drive3Path = new RamseteDrivePath(genTrajectory(Paths.BASIC), kRESET_ODOMETRY, m_drive);
     m_autoCommand.addOption(AutonomousSteps.DRIVE3, m_drive3Path);
     m_stepDrive3Path = new StepState(AutonomousSteps.DRIVE3,
         m_ConsoleAuto.getSwitchSupplier(ConsoleConstants.kDRIVE_PATTERN_1_SW));
 
+        m_autoCommand.addOption(AutonomousSteps.TURNPATH, new RamseteDrivePath(genTrajectory(Paths.BEND), kRESET_ODOMETRY, m_drive));
+        m_stepturnPath = new StepState(AutonomousSteps.TURNPATH,m_ConsoleAuto.getSwitchSupplier(3));
     // array group length must match the enum entries in AutonomousCommands
     // anything extra is ignored
     m_cmdSteps = new StepState[][] {
         { m_stepWaitForCount, m_stepPlaceConeM, m_stepDrive3Path },
-        { m_stepWaitForCount, m_stepPlaceConeM,  m_stepBalance }
+        { m_stepWaitForCount, m_stepPlaceConeM, m_stepBalance },
+        { m_stepWaitForCount, m_stepPlaceConeM, m_stepturnPath }
         // { m_stepWaitForCount, m_stepMoveArm, m_stepPlaceConeM, m_stepDrive3Path }
     };
     // the command lists are matched sequentially to the enum entries
@@ -278,13 +333,23 @@ public class AutonomousSubsystem extends SubsystemBase {
 
   // generate an internal trajectory using specified begin, way points, and end
 
-  private void genTrajectory() {
-    m_drive3Trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(new Translation2d(-1.5, 0)),
-        new Pose2d(-2.5, 0, new Rotation2d(0)),
+  //comment out and reperduce with plain numbers to test logic
+  private Trajectory genTrajectory(Paths path) {
+   // System.out.println(path.getEndX());
+    return TrajectoryGenerator.generateTrajectory(
+        new Pose2d(path.getStartX(), path.getStartY(), new Rotation2d(0)),
+        List.of(new Translation2d(path.getMidX(), path.getMidY())),
+        new Pose2d(path.getEndX(), path.getEndY(), new Rotation2d(0)),
         m_drive.getTrajConfig());
   }
+  /*private void genTrajectory(Paths path) {
+    System.out.println(path.getEndX());
+    m_drive3Trajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(new Translation2d(1.5, 0)),
+        new Pose2d(2.0, 0, new Rotation2d(0)),
+        m_drive.getTrajConfig());
+  }*/
   // change posistions to constants at home
 
   // read externally generated trajectory (path) from an external file in the
@@ -363,7 +428,7 @@ public class AutonomousSubsystem extends SubsystemBase {
         switch (m_currentStepName) {
           case WAIT1:
             m_currentCommand = getWaitCommand(1);
-            break; 
+            break;
           case WAIT2:
             m_currentCommand = getWaitCommand(2);
             break;
@@ -374,7 +439,7 @@ public class AutonomousSubsystem extends SubsystemBase {
             m_currentCommand = m_autoCommand.getSelected(m_currentStepName);
             break;
         }
-        
+
         if (m_currentCommand == null) {
           completionAction = kSTATUS_NULL;
         }

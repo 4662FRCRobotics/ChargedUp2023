@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import com.revrobotics.CANSparkMax;
@@ -43,6 +45,16 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_rightEncoderSign;
   private DifferentialDriveOdometry m_diffOdometry;
   private double m_driveDistance;
+
+ /*  private enum DrivePaths {
+    
+    PATH0( new Pose2d(0, 0, new Rotation2d(0)),
+    List.of(new Translation2d(-1.5, 0)),
+    new Pose2d(-2.5, 0, new Rotation2d(0)),
+    getTrajConfig()),
+    PATH1,
+    PATH2;
+    }*/
 
   public DriveSubsystem() {
     m_throttle= DriveConstants.kMEDIUM_GEAR_SPEED;
