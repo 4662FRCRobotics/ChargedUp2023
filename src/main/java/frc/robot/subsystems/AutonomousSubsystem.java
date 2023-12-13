@@ -293,7 +293,7 @@ public class AutonomousSubsystem extends SubsystemBase {
     // does not stop, fix before next use
     m_moveArm = new MoveTrapProfileElbow(ArmConstants.kHIGH_GOAL_POS, armJoint);
     m_autoCommand.addOption(AutonomousSteps.MOVEARM, m_moveArm);
-    m_stepMoveArm = new StepState(AutonomousSteps.MOVEARM, m_ConsoleAuto.getSwitchSupplier(4));
+    m_stepMoveArm = new StepState(AutonomousSteps.MOVEARM, m_ConsoleAuto.getSwitchSupplier(3));
 
     /*
      * m_placeConeM = new ParallelRaceGroup(
