@@ -26,7 +26,7 @@ public final class Constants {
 
   public static final class DriveConstants {
     
-    public static final double kTURN_SPEED = .65;
+    public static final double kTURN_SPEED = .85;
     public static final int kLeftMotor1Port = 2;
     public static final int kLeftMotor2Port = 3;
     public static final int kRightMotor1Port = 4;

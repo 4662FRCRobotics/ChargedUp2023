@@ -86,7 +86,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftController2.follow(m_leftController1);
     m_rightController2.follow(m_rightController1);
     m_differentialdrive = new DifferentialDrive(m_leftController1, m_rightController1);
-    m_rightController1.setInverted(!DriveConstants.kIS_DRIVE_INVERTED);
+    m_rightController1.setInverted(DriveConstants.kIS_DRIVE_INVERTED);
     m_leftController1.setInverted(DriveConstants.kIS_DRIVE_INVERTED);
     // super(
     // The PIDController used by the subsystem
